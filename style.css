@@ -1,0 +1,15 @@
+body , html{
+    background: lightblue;
+}
+
+#mapid { 
+    
+    border: 5px solid #ffcc5c;
+    display: flex;
+    height: 90%;
+    align-items: center;
+    justify-content: center;
+    margin:15spx;
+
+
+}

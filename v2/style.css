@@ -1,0 +1,13 @@
+body , html{
+    background: lightblue;
+}
+
+#map{ 
+    
+    border: 5px solid #ffcc5c;
+
+    height: 90%;
+    width:90%;
+  
+
+}

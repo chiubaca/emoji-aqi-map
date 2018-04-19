@@ -1,15 +1,146 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* CSS Reset End */
+
 body , html{
     background: lightblue;
 }
 
-#mapid { 
-    
-    border: 5px solid #ffcc5c;
-    display: flex;
+#mapid {    
     height: 90%;
-    align-items: center;
-    justify-content: center;
-    margin:15px;
+
+}
+
+#pollution-data-buttons{
+height: 8%;
+display: flex;
+justify-content: space-around;
+text-align: center
 
 
 }
+
+#pollution-data-buttons *{
+    flex-grow: 1;
+    flex-basis: 0;
+    }
+ 
+    #good {
+    border: white ;
+    border-style:solid;
+    background: #096;
+   
+    }
+
+    #good:hover {
+    border: black ;
+    border-style:solid;
+    background: red;
+    }
+
+    #moderate {
+    border: white ;
+    border-style:solid;
+    background: #ffde33;
+    }
+
+    #moderate:hover {
+    border: black ;
+    border-style:solid;
+    background: red;
+    }
+
+    #sensitive {
+        border: white ;
+        border-style:solid;
+        background: #ff9933;
+        }
+    
+        #sensitive:hover {
+        border: black ;
+        border-style:solid;
+        background: red;
+        }
+
+        #unhealthy {
+            border: white ;
+            border-style:solid;
+            background: #cc0033;
+            }
+        
+            #unhealthy:hover {
+            border: black ;
+            border-style:solid;
+            background: red;
+            }
+            #v_unhealthy {
+                border: white ;
+                border-style:solid;
+                background: #660099;
+                }
+            
+                #v_unhealthy:hover {
+                border: black ;
+                border-style:solid;
+                background: red;
+                }
+                #hazardous {
+                    border: white ;
+                    border-style:solid;
+                    background: #7e0023;
+                    }
+                
+                    #hazardous:hover {
+                    border: black ;
+                    border-style:solid;
+                    background: red;
+                    }
+    
+

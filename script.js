@@ -2,8 +2,16 @@ const WAQI_TOKEN = "ce79b4fab3208523b358a65b2eccc4ca6b84b269";
 const WAQI_URL = "https://tiles.waqi.info/tiles/usepa-aqi/{z}/{x}/{y}.png?token=" + WAQI_TOKEN;
 const WAQI_ATTR = 'Air  Quality  Tiles  &copy;  <a  href="http://waqi.info">waqi.info</a>';
 
-/*create array to store coordinates:*/
-var markers = new Array();
+//custom divIcon see - http://leafletjs.com/reference-1.3.0.html#divicon
+let good =        L.divIcon({ className: '', html: '😀' });
+let moderate =    L.divIcon({ className: '', html: '🙁' });
+let senstive =    L.divIcon({ className: '', html: '😷' });
+let unhealthy =   L.divIcon({ className: '', html: '😨' }); 
+let v_unhealthy = L.divIcon({ className: '', html: '🤢' }); 
+let hazardous =   L.divIcon({ className: '', html: '💀' }); 
+
+//var marker;
+let goodResults = [];
 
 //Initiate Map and layers...
 var map = L.map('mapid').setView([51.505, -0.09], 7);
@@ -28,17 +36,9 @@ L.easyButton('<div>🔥</div>', function () {
   returnDataInView();
 }).addTo(map);
 
-//Remove all la
+//Remove all layers and readd basemap 
+//TODO: work out how to remove just marker icons 
 L.easyButton('<div>❌</div>', function () {
-  //alert('you just clicked a font awesome icon');
-  //removeAllPoints();
-
-  console.log(markers)
-
-  for(i=0;i<markers.length;i++) {
-    console.log(markers[i])
-    map.removeLayer(markers[i]);
-    }
     
     map.eachLayer(function(l){
       l.remove()
@@ -49,9 +49,13 @@ L.easyButton('<div>❌</div>', function () {
       id: 'mapbox.streets',
       accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
     }).addTo(map)  
-    
-
+  
 }).addTo(map);
+
+L.easyButton('<div>❌2</div>', function () {
+  removeGood()
+  }).addTo(map);
+
 
 
 //Exeprimental..Map on click event not being used for anything atm
@@ -100,12 +104,7 @@ function returnDataInView() {
   var NE = map.getBounds().getNorthEast();
   var SW = map.getBounds().getSouthWest();
   //var center =  map.getBounds().getCenter();
-  let good =        L.divIcon({ className: '', html: '😀' });
-  let moderate =    L.divIcon({ className: '', html: '🙁' });
-  let senstive =    L.divIcon({ className: '', html: '😷' });
-  let unhealthy =   L.divIcon({ className: '', html: '😨' }); 
-  let v_unhealthy = L.divIcon({ className: '', html: '🤢' }); 
-  let hazardous =   L.divIcon({ className: '', html: '💀' }); 
+
 
   var http = new XMLHttpRequest();
   http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
@@ -117,8 +116,7 @@ function returnDataInView() {
       console.log(result);
 
       for (i in result.data) {
-        var LamMarker = new L.marker([result.data[i].lat, result.data[i].lon]);
-
+    
         if (result.data[i].aqi > 300){
           L.marker([result.data[i].lat, result.data[i].lon], { icon: hazardous }).addTo(map);
         }
@@ -132,10 +130,10 @@ function returnDataInView() {
           L.marker([result.data[i].lat, result.data[i].lon], { icon: senstive }).addTo(map);
         }
         if (result.data[i].aqi < 100 && result.data[i].aqi > 51){
-          L.marker([result.data[i].lat, result.data[i].lon], { icon: moderate }).addTo(map);        }
+          L.marker([result.data[i].lat, result.data[i].lon], { icon: moderate }).addTo(map);
+        }
         if (result.data[i].aqi < 50){          
           L.marker([result.data[i].lat, result.data[i].lon], { icon: good }).addTo(map);
-         
         }
        
       };
@@ -143,3 +141,44 @@ function returnDataInView() {
   };
   http.send();
 };
+ 
+function getGood() {
+  removeGood()
+  let NE = map.getBounds().getNorthEast();
+  let SW = map.getBounds().getSouthWest();
+
+  var http = new XMLHttpRequest();
+  http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
+  http.onreadystatechange = function () {
+    if (http.readyState == 4 && http.status == 200) {
+      var result = JSON.parse(http.response)
+
+      for (i in result.data) {
+      
+        if (result.data[i].aqi < 50){          
+          //L.marker([result.data[i].lat, result.data[i].lon], { icon: good }).addTo(map);
+          // L.Marker([result.data[i].lat, result.data[i].lon])
+
+          marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
+          
+        
+          goodResults.push(marker)
+        
+        }
+      };
+
+      console.log(goodResults)
+      L.layerGroup(goodResults).addTo(map)
+    };
+  };
+  http.send();
+};
+
+function removeGood(){
+  for(i=0;i<goodResults.length;i++) {
+    map.removeLayer(goodResults[i]);
+    }
+  
+  goodResults = [];
+
+}

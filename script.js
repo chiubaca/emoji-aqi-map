@@ -3,7 +3,7 @@ const WAQI_URL = "https://tiles.waqi.info/tiles/usepa-aqi/{z}/{x}/{y}.png?token=
 const WAQI_ATTR = 'Air  Quality  Tiles  &copy;  <a  href="http://waqi.info">waqi.info</a>';
 
 //custom divIcon see - http://leafletjs.com/reference-1.3.0.html#divicon
-let good =        L.divIcon({ className: '', html: '😀' });
+
 let moderate =    L.divIcon({ className: '', html: '🙁' });
 let senstive =    L.divIcon({ className: '', html: '😷' });
 let unhealthy =   L.divIcon({ className: '', html: '😨' }); 
@@ -30,10 +30,10 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(map)
 
 //AQI tile layer for live pollution data
-L.tileLayer(WAQI_URL, { 
-  attribution: WAQI_ATTR,
-  minZoom:8
-}).addTo(map);
+// L.tileLayer(WAQI_URL, { 
+//   attribution: WAQI_ATTR,
+//   minZoom:8
+// }).addTo(map);
 
 
 //This can replace the customControl Class,
@@ -42,32 +42,15 @@ L.easyButton('<div>🔥</div>', function () {
   returnDataInView();
 }).addTo(map);
 
-//Remove all layers and readd basemap 
-//TODO: work out how to remove just marker icons 
+
 L.easyButton('<div>❌</div>', function () {
-    
-    map.eachLayer(function(l){
-      l.remove()
-      })
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 18,
-      id: 'mapbox.streets',
-      accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
-    }).addTo(map)  
-  
-}).addTo(map);
-
-L.easyButton('<div>❌2</div>', function () {
-  removeGood()
+  removeLayers(goodResults)
   }).addTo(map);
-
-
 
 //Exeprimental..Map on click event not being used for anything atm
 map.on('click', function (e) {
-  returnDataInView()
-  console.log(`FROM CLICK Lat: ${e.latlng.lat} Long: ${e.latlng.lng}`);
+  //returnDataInView()
+  //console.log(`FROM CLICK Lat: ${e.latlng.lat} Long: ${e.latlng.lng}`);
   //map.flyTo([e.latlng.lat,e.latlng.lng], 9)
   //getPollution(e.latlng.lat, e.latlng.lng)
 });
@@ -149,40 +132,36 @@ function returnDataInView() {
 };
  
 function getGood() {
-  removeGood()
+  removeLayers(goodResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
-
   var http = new XMLHttpRequest();
   http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
   http.onreadystatechange = function () {
     if (http.readyState == 4 && http.status == 200) {
       var result = JSON.parse(http.response)
-
+      //let good = L.divIcon({ className: '', html: '😀' +  })
+      console.log(result)
       for (i in result.data) {
-      
-        if (result.data[i].aqi < 50){          
-          //L.marker([result.data[i].lat, result.data[i].lon], { icon: good }).addTo(map);
-          // L.Marker([result.data[i].lat, result.data[i].lon])
-
+        if (result.data[i].aqi < 50){
+          let good = L.divIcon({ className: 'emoji-icons',
+                                 html: "😀"+ "<div class='good-aqi'>"+result.data[i].aqi+"</div>" , 
+                                 bgPos:[100,-100] 
+                              })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
-          
-        
           goodResults.push(marker)
-        
         }
       };
-
-      console.log(goodResults)
       L.layerGroup(goodResults).addTo(map)
     };
   };
   http.send();
 };
 
-function removeGood(){
+// Function to remove layers from an array of maker objects
+function removeLayers(layersArray){
   for(i=0;i<goodResults.length;i++) {
-    map.removeLayer(goodResults[i]);
+    map.removeLayer(layersArray[i]);
     }
   
   goodResults = [];
@@ -199,7 +178,7 @@ map.on('moveend', function() {
 
   if(document.getElementById("goodCheck").checked){
     console.log("good is checked")
-    removeGood()
+    removeLayers(goodResults)
     getGood()
   }else{
     console.log("good is not checked")

@@ -10,8 +10,14 @@ let unhealthy =   L.divIcon({ className: '', html: '😨' });
 let v_unhealthy = L.divIcon({ className: '', html: '🤢' }); 
 let hazardous =   L.divIcon({ className: '', html: '💀' }); 
 
-//var marker;
+//Arrays to store markers for each classification;
 let goodResults = [];
+let moderateResults = [];
+let sensitiveResults = []; 
+let unhealthyResults = [];
+let v_unhealthyResults = [];
+let hazardousResults = [];
+
 
 //Initiate Map and layers...
 var map = L.map('mapid').setView([51.505, -0.09], 7);
@@ -182,3 +188,24 @@ function removeGood(){
   goodResults = [];
 
 }
+
+map.on('moveend', function() {
+  // code stuff
+  let NE = map.getBounds().getNorthEast();
+  let SW = map.getBounds().getSouthWest();
+  // console.log(`NE Coordinate ${NE} `)
+  // console.log(`SW Coordinate ${SW} `)
+  
+
+  if(document.getElementById("goodCheck").checked){
+    console.log("good is checked")
+    removeGood()
+    getGood()
+  }else{
+    console.log("good is not checked")
+  } 
+   
+});
+
+//TODO: behaviour for toggle switches 
+// Toggle Switches //

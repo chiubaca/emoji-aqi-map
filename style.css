@@ -1,7 +1,8 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
+/* CSS Reset Start */
+  /* http://meyerweb.com/eric/tools/css/reset/ 
+    v2.0 | 20110126
+    License: none (public domain)
+  */
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -58,89 +59,64 @@ body , html{
 
 }
 
-#pollution-data-buttons{
-height: 8%;
-display: flex;
-justify-content: space-around;
-text-align: center
 
-
+#container{
+  display:flex;
+  flex-wrap: wrap;
+  
 }
 
-#pollution-data-buttons *{
-    flex-grow: 1;
-    flex-basis: 0;
-    }
- 
-    #good {
-    border: white ;
-    border-style:solid;
-    background: #096;
-   
-    }
+.switch {
+  position: relative;
+  display: inline-block;
+  flex-grow:1;
+  height:55px;
+  border-style: solid;
+  
+  border-width: 3px;
+  margin:0px 1px 0px 1px;
+}
 
-    #good:hover {
-    border: black ;
-    border-style:solid;
-    background: red;
-    }
+/* text centering in toggles */
+.switch p {
+  text-align:center;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)  
+}
 
-    #moderate {
-    border: white ;
-    border-style:solid;
-    background: #ffde33;
-    }
+.toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
 
-    #moderate:hover {
-    border: black ;
-    border-style:solid;
-    background: red;
-    }
+#toggle-color-1,#toggle-color-2,#toggle-color-3,#toggle-color-4,#toggle-color-5,#toggle-color-6{
+  background:grey;
+} 
 
-    #sensitive {
-        border: white ;
-        border-style:solid;
-        background: #ff9933;
-        }
-    
-        #sensitive:hover {
-        border: black ;
-        border-style:solid;
-        background: red;
-        }
-
-        #unhealthy {
-            border: white ;
-            border-style:solid;
-            background: #cc0033;
-            }
-        
-            #unhealthy:hover {
-            border: black ;
-            border-style:solid;
-            background: red;
-            }
-            #v_unhealthy {
-                border: white ;
-                border-style:solid;
-                background: #660099;
-                }
-            
-                #v_unhealthy:hover {
-                border: black ;
-                border-style:solid;
-                background: red;
-                }
-                #hazardous {
-                    border: white ;
-                    border-style:solid;
-                    background: #7e0023;
-                    }
-                
-                    #hazardous:hover {
-                    border: black ;
-                    border-style:solid;
-                    background: red;
-                    }
-    
-
+input:checked + #toggle-color-1 {
+  background-color: #096;;
+}
+input:checked + #toggle-color-2 {
+  background-color: #ffde33;
+}
+input:checked + #toggle-color-3 {
+  background-color: #ff9933;
+}
+input:checked + #toggle-color-4 {
+  background-color: #cc0033;
+}
+input:checked + #toggle-color-5 {
+  background-color: #660099;
+}
+input:checked + #toggle-color-6 {
+  background-color: #7e0023;
+}

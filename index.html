@@ -31,22 +31,57 @@
 </head>
 
 <body>
-    
+
     <div id="mapid"></div>
-    
-    <div id="pollution-data-buttons">
 
-        <div id="good" onclick="getGood()">Good 😀</div>
-        <div id="moderate">Moderate 🙁</div>
-        <div id="sensitive">Unhealthy for Sensitive Groups 😨</div>
-        <div id="unhealthy">Unhealthy 😷</div>
-        <div id="v_unhealthy">Very Unhealthy 🤢</div>
-        <div id="hazardous">Hazardous 💀</div>
+    <div id="container">
 
+        <label class="switch">
+            <input type="checkbox" id="goodCheck">
+            <span class="toggle" id="toggle-color-1">
+                <p>Good 😀</p>
+            </span>      
+        </label>
+
+        <label class="switch">
+            <input type="checkbox" id="toggle2">
+            <span class="toggle" id="toggle-color-2">
+                <p>Moderate 🙁</p>
+            </span>
+        </label>
+
+        <label class="switch">
+            <input type="checkbox" id="toggle3">
+            <span class="toggle" id="toggle-color-3">
+                <p>Unhealthy for Sensitive Groups 😨</p>
+            </span>
+        </label>
+
+        <label class="switch">
+            <input type="checkbox" id="toggle3">
+            <span class="toggle" id="toggle-color-4">
+                <p>Very Unhealthy 😷</p>
+            </span>
+        </label>
+
+        <label class="switch">
+            <input type="checkbox" id="toggle3">
+            <span class="toggle" id="toggle-color-5">
+                <p>Very Unhealthy 🤢</p>
+            </span>
+        </label>
+
+        <label class="switch">
+            <input type="checkbox" id="toggle3">
+            <span class="toggle" id="toggle-color-6">
+                <p>Hazardous 💀</p>
+            </span>
+        </label>
     </div>
 
-</body>
-    
-    <script src="script.js"></script>
-</html>
 
+</body>
+
+<script src="script.js"></script>
+
+</html>

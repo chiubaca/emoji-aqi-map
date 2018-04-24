@@ -18,6 +18,8 @@ let unhealthyResults = [];
 let v_unhealthyResults = [];
 let hazardousResults = [];
 
+//layers get added to this object to generate clusters
+var markersCluster = L.markerClusterGroup();
 
 //Initiate Map and layers...
 var map = L.map('mapid').setView([51.505, -0.09], 7);
@@ -45,6 +47,13 @@ L.easyButton('<div>🔥</div>', function () {
 
 L.easyButton('<div>❌</div>', function () {
   removeLayers(goodResults)
+  map.removeLayers(markersCluster);
+  }).addTo(map);
+
+L.easyButton('<div>♻️</div>', function () {
+  
+  //refresh clusters
+  markersCluster.refreshClusters(goodResults)
   }).addTo(map);
 
 //Exeprimental..Map on click event not being used for anything atm
@@ -72,21 +81,6 @@ function getPollution(lat, long) {
   };
   http.send();
 };
-
-function removeAllPoints(){
-  map.eachLayer(function(l){
-  //l.remove()
-   console.log(l)  
-
-
-  })
-//   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-//   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-//   maxZoom: 18,
-//   id: 'mapbox.streets',
-//   accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
-// }).addTo(map)
-}
 
 function returnDataInView() {
   //Grabs the map NE and SW bounds of current map view for AQI "bounds" request
@@ -132,6 +126,7 @@ function returnDataInView() {
 };
  
 function getGood() {
+
   removeLayers(goodResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
@@ -141,19 +136,30 @@ function getGood() {
     if (http.readyState == 4 && http.status == 200) {
       var result = JSON.parse(http.response)
       //let good = L.divIcon({ className: '', html: '😀' +  })
-      console.log(result)
+      
+      
+
       for (i in result.data) {
         if (result.data[i].aqi < 50){
           let good = L.divIcon({ className: 'emoji-icons',
-                                 html: "😀"+ "<div class='good-aqi'>"+result.data[i].aqi+"</div>" , 
+                                 html: "😀"+ "<div class='good-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
           goodResults.push(marker)
         }
       };
-      L.layerGroup(goodResults).addTo(map)
+
+     //map.clearLayers(clearLayers) 
+      //Clustering code - TODO: Improve perf
+      markersCluster.clearLayers()
+      markersCluster.addLayer( L.layerGroup(goodResults))
+      map.addLayer(markersCluster);
+      markersCluster.refreshClusters( L.layerGroup(goodResults))
+      //markersCluster.refreshClusters()
+      //L.layerGroup(goodResults).addTo(map)
     };
+    
   };
   http.send();
 };

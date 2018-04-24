@@ -130,13 +130,22 @@ input:checked + #toggle-color-6 {
 
 .good-aqi{
   text-align:center;
-  background-color: #096;
+  background-color: rgba(0, 153, 102, 0.925);
   border: white;
   border-style: solid;
-  border-width: 1px;
   width: 20px;
   color: white;
   border-radius: 5px;
   padding: 1px 5px 0 5px;
-  margin: -50px 0 0 -5px;
+  margin: -55px 0 0 -8px;
+}
+
+.line {
+  height: 6px;
+  width: 3px;
+  border-radius: 8px;
+  background-color: white;
+  position: absolute;
+  left:10px;
+  top: -5px;
 }

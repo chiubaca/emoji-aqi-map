@@ -19,7 +19,7 @@ let v_unhealthyResults = [];
 let hazardousResults = [];
 
 //layers get added to this object to generate clusters
-var markersCluster = L.markerClusterGroup();
+var goodMarkerClusters = L.markerClusterGroup();
 
 //Initiate Map and layers...
 var map = L.map('mapid').setView([51.505, -0.09], 7);
@@ -47,7 +47,7 @@ L.easyButton('<div>🔥</div>', function () {
 
 L.easyButton('<div>❌</div>', function () {
   removeLayers(goodResults)
-  map.removeLayers(markersCluster);
+  goodMarkerClusters.clearLayers()
   }).addTo(map);
 
 L.easyButton('<div>♻️</div>', function () {
@@ -150,14 +150,12 @@ function getGood() {
         }
       };
 
-     //map.clearLayers(clearLayers) 
-      //Clustering code - TODO: Improve perf
-      markersCluster.clearLayers()
-      markersCluster.addLayer( L.layerGroup(goodResults))
-      map.addLayer(markersCluster);
-      markersCluster.refreshClusters( L.layerGroup(goodResults))
-      //markersCluster.refreshClusters()
-      //L.layerGroup(goodResults).addTo(map)
+      //Clustering 
+      goodMarkerClusters.clearLayers()
+      goodMarkerClusters.addLayer( L.layerGroup(goodResults))
+      map.addLayer(goodMarkerClusters);
+      //goodMarkerClusters.refreshClusters( L.layerGroup(goodResults))
+
     };
     
   };
@@ -174,23 +172,41 @@ function removeLayers(layersArray){
 
 }
 
+//map move event to trigger good levels of pollution
 map.on('moveend', function() {
   // code stuff
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
-  // console.log(`NE Coordinate ${NE} `)
-  // console.log(`SW Coordinate ${SW} `)
-  
 
   if(document.getElementById("goodCheck").checked){
-    console.log("good is checked")
+    //console.log("good is checked")
     removeLayers(goodResults)
     getGood()
   }else{
-    console.log("good is not checked")
+    //console.log("good is not checked")
   } 
    
 });
 
+//map move event to trigger moderate levels of pollution
+map.on('moveend',function(){
+  console.log("another movend event")
+})
+
 //TODO: behaviour for toggle switches 
 // Toggle Switches //
+
+//Good Switch
+function goodAddRemove(){
+  var state = document.getElementById("goodCheck").checked 
+  console.log(state)
+  if(state === false){
+    goodMarkerClusters.clearLayers()
+    removeLayers(goodResults)
+    console.log("good is not checked")
+  }else{
+
+    console.log("good is checked")
+    getGood()
+  } 
+}

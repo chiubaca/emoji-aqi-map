@@ -20,6 +20,7 @@ let hazardousResults = [];
 
 //layers get added to this object to generate clusters
 var goodMarkerClusters = L.markerClusterGroup();
+var modMarkerClusters = L.markerClusterGroup();
 
 //Initiate Map and layers...
 var map = L.map('mapid').setView([51.505, -0.09], 7);
@@ -31,40 +32,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
 }).addTo(map)
 
-//AQI tile layer for live pollution data
-// L.tileLayer(WAQI_URL, { 
-//   attribution: WAQI_ATTR,
-//   minZoom:8
-// }).addTo(map);
-
-
-//This can replace the customControl Class,
-L.easyButton('<div>🔥</div>', function () {
-  //alert('you just clicked a font awesome icon');
-  returnDataInView();
-}).addTo(map);
-
-
-L.easyButton('<div>❌</div>', function () {
-  removeLayers(goodResults)
-  goodMarkerClusters.clearLayers()
-  }).addTo(map);
-
-L.easyButton('<div>♻️</div>', function () {
-  
-  //refresh clusters
-  markersCluster.refreshClusters(goodResults)
-  }).addTo(map);
-
-//Exeprimental..Map on click event not being used for anything atm
-map.on('click', function (e) {
-  //returnDataInView()
-  //console.log(`FROM CLICK Lat: ${e.latlng.lat} Long: ${e.latlng.lng}`);
-  //map.flyTo([e.latlng.lat,e.latlng.lng], 9)
-  //getPollution(e.latlng.lat, e.latlng.lng)
-});
-
-
 //AJAX reqeust to grab pollution json from AQI api
 function getPollution(lat, long) {
   var http = new XMLHttpRequest();
@@ -72,34 +39,24 @@ function getPollution(lat, long) {
   http.onreadystatechange = function () {
     if (http.readyState == 4 && http.status == 200) {
       var result = JSON.parse(http.response)
-      // console.log(result);
-      // console.log(result.data.city.name);
       console.log(`FROM API: Lat: ${result.data.city.geo[0]}  Long: ${result.data.city.geo[1]}`);
-      //map.flyTo([result.data.city.geo[0],result.data.city.geo[1]],13)
-      //need to implement error handling here:
+      //TO DO: need to implement error handling here:
     }
   };
   http.send();
 };
 
+// retrives pollution data of current map view for AQI "bounds" by using the map NE and SW coordinates
 function returnDataInView() {
-  //Grabs the map NE and SW bounds of current map view for AQI "bounds" request
   var NE = map.getBounds().getNorthEast();
   var SW = map.getBounds().getSouthWest();
-  //var center =  map.getBounds().getCenter();
-
 
   var http = new XMLHttpRequest();
   http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
   http.onreadystatechange = function () {
     if (http.readyState == 4 && http.status == 200) {
       var result = JSON.parse(http.response)
-      //  console.log(result);
-      //  console.log(result.data.city.name);s
-      console.log(result);
-
       for (i in result.data) {
-    
         if (result.data[i].aqi > 300){
           L.marker([result.data[i].lat, result.data[i].lon], { icon: hazardous }).addTo(map);
         }
@@ -118,15 +75,14 @@ function returnDataInView() {
         if (result.data[i].aqi < 50){          
           L.marker([result.data[i].lat, result.data[i].lon], { icon: good }).addTo(map);
         }
-       
       };
     };
   };
   http.send();
 };
- 
-function getGood() {
 
+//Good: Call to get data with an AQI score of less than 50 
+function getGood() {
   removeLayers(goodResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
@@ -135,10 +91,6 @@ function getGood() {
   http.onreadystatechange = function () {
     if (http.readyState == 4 && http.status == 200) {
       var result = JSON.parse(http.response)
-      //let good = L.divIcon({ className: '', html: '😀' +  })
-      
-      
-
       for (i in result.data) {
         if (result.data[i].aqi < 50){
           let good = L.divIcon({ className: 'emoji-icons',
@@ -149,39 +101,65 @@ function getGood() {
           goodResults.push(marker)
         }
       };
-
       //Clustering 
       goodMarkerClusters.clearLayers()
       goodMarkerClusters.addLayer( L.layerGroup(goodResults))
       map.addLayer(goodMarkerClusters);
       //goodMarkerClusters.refreshClusters( L.layerGroup(goodResults))
-
     };
-    
   };
   http.send();
 };
 
-// Function to remove layers from an array of maker objects
+//Moderate: Gets data with an AQI score of greater than 51 & < 100 
+function getMod() {
+  removeLayers(moderateResults)
+  let NE = map.getBounds().getNorthEast();
+  let SW = map.getBounds().getSouthWest();
+  var http = new XMLHttpRequest();
+  http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
+  http.onreadystatechange = function () {
+    if (http.readyState == 4 && http.status == 200) {
+      var result = JSON.parse(http.response)
+      for (i in result.data) {
+        if (result.data[i].aqi < 100 && result.data[i].aqi > 51){
+          
+          let moderate = L.divIcon({ className: 'emoji-icons',
+                                 html: "🙁"+ "<div class='mod-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 bgPos:[100,-100] 
+                              })          
+          marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
+          moderateResults.push(marker)
+        }
+      };
+      //Clustering 
+      modMarkerClusters.clearLayers()
+      modMarkerClusters.addLayer( L.layerGroup(moderateResults))
+      map.addLayer(modMarkerClusters);
+    };
+  };
+  http.send();
+};
+
+
+//Function to remove layers from an array of maker objects
 function removeLayers(layersArray){
-  for(i=0;i<goodResults.length;i++) {
+  for(i=0;i<layersArray.length;i++) {
     map.removeLayer(layersArray[i]);
     }
-  
   goodResults = [];
-
+  moderateResults = [];
 }
 
 //map move event to trigger good levels of pollution
 map.on('moveend', function() {
-  // code stuff
-  let NE = map.getBounds().getNorthEast();
-  let SW = map.getBounds().getSouthWest();
 
   if(document.getElementById("goodCheck").checked){
     //console.log("good is checked")
-    removeLayers(goodResults)
-    getGood()
+    removeLayers(goodResults);
+    removeLayers(moderateResults);
+    getGood();
+    getMod();
   }else{
     //console.log("good is not checked")
   } 
@@ -208,5 +186,20 @@ function goodAddRemove(){
 
     console.log("good is checked")
     getGood()
+  } 
+}
+
+//Moderate Switch
+function modAddRemove(){
+  var state = document.getElementById("modCheck").checked 
+  console.log(state)
+  if(state === false){
+    modMarkerClusters.clearLayers()
+    removeLayers(moderateResults)
+    console.log("moderate is not checked")
+  }else{
+
+    console.log("moderate is checked")
+    getMod()
   } 
 }

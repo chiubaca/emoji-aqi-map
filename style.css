@@ -55,7 +55,7 @@ body , html{
 }
 
 #mapid {    
-    height: 90%;
+    height: 85%;
 
 }
 
@@ -63,16 +63,15 @@ body , html{
 #container{
   display:flex;
   flex-wrap: wrap;
-  height:10%;
+  height:15%;
 }
 
 .switch {
   position: relative;
   display: inline-block;
   flex-grow:1;
-  width:200px;
-  border-style: solid;
-  
+  width:120px;
+  border-style: solid; 
   border-width: 3px;
   margin:1px;
 }
@@ -134,7 +133,19 @@ input:checked + #toggle-color-6 {
   border: white;
   border-style: solid;
   width: 20px;
-  color: white;
+  color: rgb(20, 16, 16);
+  border-radius: 5px;
+  padding: 1px 5px 0 5px;
+  margin: -55px 0 0 -8px;
+}
+
+.mod-aqi{
+  text-align:center;
+  background-color: #ffde33;
+  border: white;
+  border-style: solid;
+  width: 20px;
+  color: black;
   border-radius: 5px;
   padding: 1px 5px 0 5px;
   margin: -55px 0 0 -8px;

@@ -1,3 +1,23 @@
+// Emoji picture fall back
+
+var div = document.createElement('div');
+div.textContent = 'I \u2764\uFE0F emoji!';
+document.body.appendChild(div);
+
+twemoji.parse(document.body);
+
+var img = div.querySelector('img');
+
+// note the div is preserved
+img.parentNode === div; // true
+
+img.src;        // https://twemoji.maxcdn.com/36x36/2764.png
+img.alt;        // \u2764\uFE0F
+img.className;  // emoji
+img.draggable;  // false
+
+
+
 const WAQI_TOKEN = "ce79b4fab3208523b358a65b2eccc4ca6b84b269";
 const WAQI_URL = "https://tiles.waqi.info/tiles/usepa-aqi/{z}/{x}/{y}.png?token=" + WAQI_TOKEN;
 const WAQI_ATTR = 'Air  Quality  Tiles  &copy;  <a  href="http://waqi.info">waqi.info</a>';
@@ -83,6 +103,7 @@ function returnDataInView() {
 
 //Good: Call to get data with an AQI score of less than 50 
 function getGood() {
+  
   removeLayers(goodResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
@@ -94,7 +115,7 @@ function getGood() {
       for (i in result.data) {
         if (result.data[i].aqi < 50){
           let good = L.divIcon({ className: 'emoji-icons',
-                                 html: "😀"+ "<div class='good-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("😀")+ "<div class='good-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
@@ -113,6 +134,7 @@ function getGood() {
 
 //Moderate: Gets data with an AQI score of greater than 51 & < 100 
 function getMod() {
+  
   removeLayers(moderateResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
@@ -153,6 +175,7 @@ function removeLayers(layersArray){
 
 //map move event to trigger good levels of pollution
 map.on('moveend', function() {
+  
 
   if(document.getElementById("goodCheck").checked){
     //console.log("good is checked")

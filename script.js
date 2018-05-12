@@ -10,7 +10,7 @@ const WAQI_ATTR = 'Air  Quality  Tiles  &copy;  <a  href="http://waqi.info">waqi
 let moderate =    L.divIcon({ className: '', html: '🙁' });
 let senstive =    L.divIcon({ className: '', html: '😷' });
 let unhealthy =   L.divIcon({ className: '', html: '😨' }); 
-let v_unhealthy = L.divIcon({ className: '', html: '🤢' }); 
+let vUnhealthy = L.divIcon({ className: '', html: '🤢' }); 
 let hazardous =   L.divIcon({ className: '', html: '💀' }); 
 
 //Arrays to store markers for each classification;
@@ -18,12 +18,16 @@ let goodResults = [];
 let moderateResults = [];
 let sensitiveResults = []; 
 let unhealthyResults = [];
-let v_unhealthyResults = [];
+let vUnhealthyResults = [];
 let hazardousResults = [];
 
 //layers get added to this object to generate clusters
-var goodMarkerClusters = L.markerClusterGroup();
-var modMarkerClusters = L.markerClusterGroup();
+let goodClusters = L.markerClusterGroup();
+let moderateClusters = L.markerClusterGroup();
+let sensitiveClusters = L.markerClusterGroup();
+let unhealthyClusters =  L.markerClusterGroup();
+let vUnhealthyClusters = L.markerClusterGroup();
+let hazardousClusters = L.markerClusterGroup();
 
 //Initiate Map and layers...
 var map = L.map('mapid').setView([51.505, -0.09], 7);
@@ -107,17 +111,16 @@ function getGood() {
         }
       };
       //Clustering 
-      goodMarkerClusters.clearLayers()
-      goodMarkerClusters.addLayer( L.layerGroup(goodResults))
-      map.addLayer(goodMarkerClusters);
-      //goodMarkerClusters.refreshClusters( L.layerGroup(goodResults))
+      goodClusters.clearLayers()
+      goodClusters.addLayer( L.layerGroup(goodResults))
+      map.addLayer(goodClusters);
     };
   };
   http.send();
 };
 
 //Moderate scores: AQI < 100 && > 51
-function getMod() {
+function getModerate() {
   //Before retreiving data, clear the existing array
   removeLayers(moderateResults)
   let NE = map.getBounds().getNorthEast();
@@ -131,7 +134,7 @@ function getMod() {
         if (result.data[i].aqi < 100 && result.data[i].aqi > 51){
           
           let moderate = L.divIcon({ className: 'emoji-icons',
-                                 html: "🙁"+ "<div class='mod-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("🙁")+ "<div class='mod-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
@@ -139,9 +142,41 @@ function getMod() {
         }
       };
       //Clustering 
-      modMarkerClusters.clearLayers()
-      modMarkerClusters.addLayer( L.layerGroup(moderateResults))
-      map.addLayer(modMarkerClusters);
+      moderateClusters.clearLayers()
+      moderateClusters.addLayer( L.layerGroup(moderateResults))
+      map.addLayer(moderateClusters);
+    };
+  };
+  http.send();
+};
+
+
+//Sensitive scores: AQI < 200 && > 151
+function getSens() {
+  //Before retreiving data, clear the existing array
+  removeLayers(moderateResults)
+  let NE = map.getBounds().getNorthEast();
+  let SW = map.getBounds().getSouthWest();
+  var http = new XMLHttpRequest();
+  http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
+  http.onreadystatechange = function () {
+    if (http.readyState == 4 && http.status == 200) {
+      var result = JSON.parse(http.response)
+      for (i in result.data) {
+        if (result.data[i].aqi < 200 && result.data[i].aqi > 151){
+            
+          let moderate = L.divIcon({ className: 'emoji-icons',
+                                 html: twemoji.parse("😨")+ "<div class='unhelthy-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 bgPos:[100,-100] 
+                              })          
+          marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
+          moderateResults.push(marker)
+        }
+      };
+      //Clustering 
+      moderateClusters.clearLayers()
+      moderateClusters.addLayer( L.layerGroup(moderateResults))
+      map.addLayer(moderateClusters);
     };
   };
   http.send();
@@ -169,7 +204,7 @@ map.on('moveend',function(){
   console.log("movend event for moderate results")
   if(document.getElementById("modCheck").checked){
     removeLayers(moderateResults);
-    getMod();
+    getModerate();
   }else{
     console.log("Moderate is not checked")
   } 
@@ -184,7 +219,7 @@ function goodAddRemove(){
   var state = document.getElementById("goodCheck").checked 
   console.log(state)
   if(state === false){
-    goodMarkerClusters.clearLayers()
+    goodClusters.clearLayers()
     removeLayers(goodResults)
     console.log("good is not checked")
   }else{
@@ -199,12 +234,12 @@ function modAddRemove(){
   var state = document.getElementById("modCheck").checked 
   console.log(state)
   if(state === false){
-    modMarkerClusters.clearLayers()
+    moderateClusters.clearLayers()
     removeLayers(moderateResults)
     console.log("moderate is not checked")
   }else{
 
     console.log("moderate is checked")
-    getMod()
+    getModerate()
   } 
 }

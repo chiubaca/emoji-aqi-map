@@ -78,7 +78,7 @@ body , html{
 }
 
 .emoji {
-  height:15px
+  height:20px
 }
 
 /* text centering in toggles */
@@ -162,6 +162,6 @@ input:checked + #toggle-color-6 {
   border-radius: 8px;
   background-color: white;
   position: absolute;
-  left:10px;
-  top: -5px;
+  left:9px;
+  top: -6px;
 }

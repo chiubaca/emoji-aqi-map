@@ -1,22 +1,5 @@
 // Emoji picture fall back
-
-var div = document.createElement('div');
-div.textContent = 'I \u2764\uFE0F emoji!';
-document.body.appendChild(div);
-
 twemoji.parse(document.body);
-
-var img = div.querySelector('img');
-
-// note the div is preserved
-img.parentNode === div; // true
-
-img.src;        // https://twemoji.maxcdn.com/36x36/2764.png
-img.alt;        // \u2764\uFE0F
-img.className;  // emoji
-img.draggable;  // false
-
-
 
 const WAQI_TOKEN = "ce79b4fab3208523b358a65b2eccc4ca6b84b269";
 const WAQI_URL = "https://tiles.waqi.info/tiles/usepa-aqi/{z}/{x}/{y}.png?token=" + WAQI_TOKEN;

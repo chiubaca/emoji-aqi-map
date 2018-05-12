@@ -35,19 +35,15 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
 }).addTo(map)
 
-//AJAX reqeust to grab pollution json from AQI api
-function getPollution(lat, long) {
-  var http = new XMLHttpRequest();
-  http.open("GET", `https://api.waqi.info/feed/geo:${lat};${long}/?token=${WAQI_TOKEN}`, true);
-  http.onreadystatechange = function () {
-    if (http.readyState == 4 && http.status == 200) {
-      var result = JSON.parse(http.response)
-      console.log(`FROM API: Lat: ${result.data.city.geo[0]}  Long: ${result.data.city.geo[1]}`);
-      //TO DO: need to implement error handling here:
+
+// Helper function to reset layers from an array of marker object
+function removeLayers(layersArray){
+  for(i=0;i<layersArray.length;i++) {
+    map.removeLayer(layersArray[i]);
     }
-  };
-  http.send();
-};
+  goodResults = [];
+  moderateResults = [];
+}
 
 // retrives pollution data of current map view for AQI "bounds" by using the map NE and SW coordinates
 function returnDataInView() {
@@ -84,9 +80,14 @@ function returnDataInView() {
   http.send();
 };
 
-//Good: Call to get data with an AQI score of less than 50 
+
+/////////////////////
+//--DATA FUNCTIONS//
+///////////////////
+
+//Good scores: AQI < 50 
 function getGood() {
-  
+  //Before retreiving data, clear the existing array
   removeLayers(goodResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
@@ -115,9 +116,9 @@ function getGood() {
   http.send();
 };
 
-//Moderate: Gets data with an AQI score of greater than 51 & < 100 
+//Moderate scores: AQI < 100 && > 51
 function getMod() {
-  
+  //Before retreiving data, clear the existing array
   removeLayers(moderateResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
@@ -147,38 +148,36 @@ function getMod() {
 };
 
 
-//Function to remove layers from an array of maker objects
-function removeLayers(layersArray){
-  for(i=0;i<layersArray.length;i++) {
-    map.removeLayer(layersArray[i]);
-    }
-  goodResults = [];
-  moderateResults = [];
-}
+////////////////////
+//---MAP EVENTS---//
+///////////////////
 
-//map move event to trigger good levels of pollution
+
+//Move events to trigger Good levels of pollution
 map.on('moveend', function() {
-  
-
   if(document.getElementById("goodCheck").checked){
     //console.log("good is checked")
     removeLayers(goodResults);
-    removeLayers(moderateResults);
     getGood();
-    getMod();
   }else{
-    //console.log("good is not checked")
+    console.log("Good is not checked")
   } 
-   
 });
 
 //map move event to trigger moderate levels of pollution
 map.on('moveend',function(){
-  console.log("another movend event")
+  console.log("movend event for moderate results")
+  if(document.getElementById("modCheck").checked){
+    removeLayers(moderateResults);
+    getMod();
+  }else{
+    console.log("Moderate is not checked")
+  } 
 })
 
-//TODO: behaviour for toggle switches 
-// Toggle Switches //
+//////////////////////////
+//---TOGGLE SWITCHES ---//
+/////////////////////////
 
 //Good Switch
 function goodAddRemove(){

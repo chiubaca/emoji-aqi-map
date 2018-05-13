@@ -22,7 +22,7 @@ let vUnhealthyClusters = L.markerClusterGroup();
 let hazardousClusters = L.markerClusterGroup();
 
 //Initiate Map and layers...
-var map = L.map('mapid').setView([51.505, -0.09], 7);
+let map = L.map('mapid').setView([51.505, -0.09], 7);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -45,42 +45,6 @@ function removeLayers(layersArray){
   hazardousResults = [];
 
 }
-
-// retrives pollution data of current map view for AQI "bounds" by using the map NE and SW coordinates
-function returnDataInView() {
-  var NE = map.getBounds().getNorthEast();
-  var SW = map.getBounds().getSouthWest();
-
-  var http = new XMLHttpRequest();
-  http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
-  http.onreadystatechange = function () {
-    if (http.readyState == 4 && http.status == 200) {
-      var result = JSON.parse(http.response)
-      for (i in result.data) {
-        if (result.data[i].aqi > 300){
-          L.marker([result.data[i].lat, result.data[i].lon], { icon: hazardous }).addTo(map);
-        }
-        if (result.data[i].aqi < 300 && result.data[i].aqi > 201){
-          L.marker([result.data[i].lat, result.data[i].lon], { icon: v_unhealthy }).addTo(map);
-        }
-        if (result.data[i].aqi < 200 && result.data[i].aqi > 151){
-          L.marker([result.data[i].lat, result.data[i].lon], { icon: unhealthy }).addTo(map);
-        }
-        if (result.data[i].aqi < 150 && result.data[i].aqi > 101){
-          L.marker([result.data[i].lat, result.data[i].lon], { icon: senstive }).addTo(map);
-        }
-        if (result.data[i].aqi < 100 && result.data[i].aqi > 51){
-          L.marker([result.data[i].lat, result.data[i].lon], { icon: moderate }).addTo(map);
-        }
-        if (result.data[i].aqi < 50){          
-          L.marker([result.data[i].lat, result.data[i].lon], { icon: good }).addTo(map);
-        }
-      };
-    };
-  };
-  http.send();
-};
-
 
 /////////////////////
 //--DATA FUNCTIONS//

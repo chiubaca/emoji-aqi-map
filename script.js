@@ -35,7 +35,7 @@ var map = L.map('mapid').setView([51.505, -0.09], 7);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
   maxZoom: 18,
-  id: 'mapbox.streets',
+  id: 'mapbox.light',
   accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
 }).addTo(map)
 
@@ -47,6 +47,11 @@ function removeLayers(layersArray){
     }
   goodResults = [];
   moderateResults = [];
+  sensitiveResults =[];
+  unhealthyResults=[];
+  vUnhealthyResults = [];
+  hazardousResults = [];
+
 }
 
 // retrives pollution data of current map view for AQI "bounds" by using the map NE and SW coordinates
@@ -151,10 +156,10 @@ function getModerate() {
 };
 
 
-//Sensitive scores: AQI < 200 && > 151
-function getSens() {
+//Sensitive scores: AQI < 150 && > 101
+function getSensitive() {
   //Before retreiving data, clear the existing array
-  removeLayers(moderateResults)
+  removeLayers(sensitiveResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
   var http = new XMLHttpRequest();
@@ -163,20 +168,20 @@ function getSens() {
     if (http.readyState == 4 && http.status == 200) {
       var result = JSON.parse(http.response)
       for (i in result.data) {
-        if (result.data[i].aqi < 200 && result.data[i].aqi > 151){
+        if (result.data[i].aqi < 150 && result.data[i].aqi > 101){
             
           let moderate = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("😨")+ "<div class='unhelthy-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("😨")+ "<div class='sens-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
-          moderateResults.push(marker)
+          sensitiveResults.push(marker)
         }
       };
       //Clustering 
-      moderateClusters.clearLayers()
-      moderateClusters.addLayer( L.layerGroup(moderateResults))
-      map.addLayer(moderateClusters);
+      sensitiveClusters.clearLayers()
+      sensitiveClusters.addLayer( L.layerGroup(sensitiveResults))
+      map.addLayer(sensitiveClusters);
     };
   };
   http.send();
@@ -210,6 +215,17 @@ map.on('moveend',function(){
   } 
 })
 
+//map move event to trigger moderate levels of pollution
+map.on('moveend',function(){
+  console.log("movend event for moderate results")
+  if(document.getElementById("sensCheck").checked){
+    removeLayers(sensitiveResults);
+    getSensitive();
+  }else{
+    console.log("Moderate is not checked")
+  } 
+})
+
 //////////////////////////
 //---TOGGLE SWITCHES ---//
 /////////////////////////
@@ -223,7 +239,6 @@ function goodAddRemove(){
     removeLayers(goodResults)
     console.log("good is not checked")
   }else{
-
     console.log("good is checked")
     getGood()
   } 
@@ -241,5 +256,20 @@ function modAddRemove(){
 
     console.log("moderate is checked")
     getModerate()
+  } 
+}
+
+//Sensitive Switch
+function sensAddRemove(){
+  var state = document.getElementById("sensCheck").checked 
+  console.log(state)
+  if(state === false){
+    moderateClusters.clearLayers()
+    removeLayers(sensitiveResults)
+    console.log("sensitive is not checked")
+  }else{
+
+    console.log("sensitive is checked")
+    getSensitive()
   } 
 }

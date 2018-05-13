@@ -155,7 +155,6 @@ function getModerate() {
   http.send();
 };
 
-
 //Sensitive scores: AQI < 150 && > 101
 function getSensitive() {
   //Before retreiving data, clear the existing array
@@ -188,7 +187,6 @@ function getSensitive() {
 };
 
 //Unhealthy scores: AQI < 200 && > 151
-
 function getUnhealthy() {
   //Before retreiving data, clear the existing array
   removeLayers(unhealthyResults)
@@ -239,7 +237,6 @@ map.on('moveend', function() {
 
 //map move event to trigger moderate levels of pollution
 map.on('moveend',function(){
-  console.log("movend event for moderate results")
   if(document.getElementById("modCheck").checked){
     removeLayers(moderateResults);
     getModerate();
@@ -250,7 +247,6 @@ map.on('moveend',function(){
 
 //map move event to trigger sensitive levels of pollution
 map.on('moveend',function(){
-  console.log("movend event for moderate results")
   if(document.getElementById("sensCheck").checked){
     removeLayers(sensitiveResults);
     getSensitive();
@@ -261,7 +257,6 @@ map.on('moveend',function(){
 
 //map move event to trigger unhealthy levels of pollution
 map.on('moveend',function(){
-  console.log("movend event for moderate results")
   if(document.getElementById("unhealthyCheck").checked){
     removeLayers(unhealthyResults);
     getUnhealthy();
@@ -269,6 +264,7 @@ map.on('moveend',function(){
     console.log("Unhealthy is not checked")
   } 
 })
+
 
 //////////////////////////
 //---TOGGLE SWITCHES ---//
@@ -297,7 +293,6 @@ function modAddRemove(){
     removeLayers(moderateResults)
     console.log("moderate is not checked")
   }else{
-
     console.log("moderate is checked")
     getModerate()
   } 
@@ -308,12 +303,25 @@ function sensitiveAddRemove(){
   var state = document.getElementById("sensCheck").checked 
   console.log(state)
   if(state === false){
-    moderateClusters.clearLayers()
+    sensitiveClusters.clearLayers()
     removeLayers(sensitiveResults)
     console.log("sensitive is not checked")
   }else{
-
     console.log("sensitive is checked")
     getSensitive()
+  } 
+}
+
+//Unhealthy Switch
+function unhealtyAddRemove(){
+  var state = document.getElementById("unhealthyCheck").checked 
+  console.log(state)
+  if(state === false){
+    unhealthyClusters.clearLayers()
+    removeLayers(unhealthyClusters)
+    console.log("unhealthy is not checked")
+  }else{
+    console.log("unhealthy is checked")
+    getUnhealthy()
   } 
 }

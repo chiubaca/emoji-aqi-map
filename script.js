@@ -241,6 +241,37 @@ function getVUnhealthy() {
 };
 
 
+//Hazardous scores: AQI > 300
+function getHazardous() {
+  //Before retreiving data, clear the existing array
+  removeLayers(hazardousResults)
+  let NE = map.getBounds().getNorthEast();
+  let SW = map.getBounds().getSouthWest();
+  var http = new XMLHttpRequest();
+  http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
+  http.onreadystatechange = function () {
+    if (http.readyState == 4 && http.status == 200) {
+      var result = JSON.parse(http.response)
+      for (i in result.data) {
+        if (result.data[i].aqi > 300){
+            
+          let hazard = L.divIcon({ className: 'emoji-icons',
+                                 html: twemoji.parse("💀")+ "<div class='hazardous-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 bgPos:[100,-100] 
+                              })          
+          marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: hazard });
+          hazardousResults.push(marker)
+        }
+      };
+      //Clustering 
+      hazardousClusters.clearLayers()
+      hazardousClusters.addLayer( L.layerGroup(hazardousResults))
+      map.addLayer(hazardousClusters);
+    };
+  };
+  http.send();
+};
+
 
 ////////////////////
 //---MAP EVENTS---//
@@ -295,6 +326,16 @@ map.on('moveend',function(){
     getVUnhealthy();
   }else{
     console.log("Very Unhealthy is not checked")
+  } 
+})
+
+//map move event to trigger hazardous levels of pollution
+map.on('moveend',function(){
+  if(document.getElementById("hazardousCheck").checked){
+    removeLayers(hazardousResults);
+    getHazardous();
+  }else{
+    console.log("Hazardous is not checked")
   } 
 })
 
@@ -370,5 +411,19 @@ function vUnhealtyAddRemove(){
   }else{
     console.log("very unhealthy is checked")
     getVUnhealthy()
+  } 
+}
+
+//Hazardous Switch
+function hazardousAddRemove(){
+  var state = document.getElementById("hazardousCheck").checked 
+  console.log(state)
+  if(state === false){
+    hazardousClusters.clearLayers()
+    removeLayers(hazardousClusters)
+    console.log("hazardous is not checked")
+  }else{
+    console.log("hazardous is checked")
+    getHazardous()
   } 
 }

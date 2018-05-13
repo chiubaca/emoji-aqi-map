@@ -200,7 +200,7 @@ input:checked + #toggle-color-6 {
   width: 20px;
   color: black;
   border-radius: 5px;
-  padding: 1px 5px 0 5px;
+  padding: 1px 10px 0 5px;
   margin: -55px 0 0 -8px;
 }
 

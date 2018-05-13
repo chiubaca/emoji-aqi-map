@@ -5,14 +5,6 @@ const WAQI_TOKEN = "ce79b4fab3208523b358a65b2eccc4ca6b84b269";
 const WAQI_URL = "https://tiles.waqi.info/tiles/usepa-aqi/{z}/{x}/{y}.png?token=" + WAQI_TOKEN;
 const WAQI_ATTR = 'Air  Quality  Tiles  &copy;  <a  href="http://waqi.info">waqi.info</a>';
 
-//custom divIcon see - http://leafletjs.com/reference-1.3.0.html#divicon
-
-let moderate =    L.divIcon({ className: '', html: '🙁' });
-let senstive =    L.divIcon({ className: '', html: '😷' });
-let unhealthy =   L.divIcon({ className: '', html: '😨' }); 
-let vUnhealthy = L.divIcon({ className: '', html: '🤢' }); 
-let hazardous =   L.divIcon({ className: '', html: '💀' }); 
-
 //Arrays to store markers for each classification;
 let goodResults = [];
 let moderateResults = [];

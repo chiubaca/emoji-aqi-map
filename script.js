@@ -187,6 +187,39 @@ function getSensitive() {
   http.send();
 };
 
+//Unhealthy scores: AQI < 200 && > 151
+
+function getUnhealthy() {
+  //Before retreiving data, clear the existing array
+  removeLayers(unhealthyResults)
+  let NE = map.getBounds().getNorthEast();
+  let SW = map.getBounds().getSouthWest();
+  var http = new XMLHttpRequest();
+  http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
+  http.onreadystatechange = function () {
+    if (http.readyState == 4 && http.status == 200) {
+      var result = JSON.parse(http.response)
+      for (i in result.data) {
+        if (result.data[i].aqi < 200 && result.data[i].aqi > 151){
+            
+          let unhealthy = L.divIcon({ className: 'emoji-icons',
+                                 html: twemoji.parse("😷")+ "<div class='unhealty-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 bgPos:[100,-100] 
+                              })          
+          marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: unhealthy });
+          unhealthyResults.push(marker)
+        }
+      };
+      //Clustering 
+      unhealthyClusters.clearLayers()
+      unhealthyClusters.addLayer( L.layerGroup(unhealthyResults))
+      map.addLayer(unhealthyClusters);
+    };
+  };
+  http.send();
+};
+
+
 
 ////////////////////
 //---MAP EVENTS---//
@@ -215,14 +248,25 @@ map.on('moveend',function(){
   } 
 })
 
-//map move event to trigger moderate levels of pollution
+//map move event to trigger sensitive levels of pollution
 map.on('moveend',function(){
   console.log("movend event for moderate results")
   if(document.getElementById("sensCheck").checked){
     removeLayers(sensitiveResults);
     getSensitive();
   }else{
-    console.log("Moderate is not checked")
+    console.log("Sensitive is not checked")
+  } 
+})
+
+//map move event to trigger unhealthy levels of pollution
+map.on('moveend',function(){
+  console.log("movend event for moderate results")
+  if(document.getElementById("unhealthyCheck").checked){
+    removeLayers(unhealthyResults);
+    getUnhealthy();
+  }else{
+    console.log("Unhealthy is not checked")
   } 
 })
 
@@ -260,7 +304,7 @@ function modAddRemove(){
 }
 
 //Sensitive Switch
-function sensAddRemove(){
+function sensitiveAddRemove(){
   var state = document.getElementById("sensCheck").checked 
   console.log(state)
   if(state === false){

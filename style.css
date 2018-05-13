@@ -168,6 +168,18 @@ input:checked + #toggle-color-6 {
   margin: -55px 0 0 -8px;
 }
 
+.unhealty-aqi{
+  text-align:center;
+  background-color: #cc0033;
+  border: white;
+  border-style: solid;
+  width: 20px;
+  color: black;
+  border-radius: 5px;
+  padding: 1px 5px 0 5px;
+  margin: -55px 0 0 -8px;
+}
+
 .line {
   height: 6px;
   width: 3px;

@@ -71,6 +71,8 @@ function getGood() {
           goodResults.push(marker)
         }
       };
+    
+
       //Clustering 
       goodClusters.clearLayers()
       goodClusters.addLayer( L.layerGroup(goodResults))
@@ -237,6 +239,70 @@ function getHazardous() {
 };
 
 
+//Info About Closest Station
+function closestStationInfo(){
+  return;
+}
+
+
+map.on('click', function(e) {
+
+
+  let lat = e.latlng.lat;
+  let lng = e.latlng.lng;
+  //console.log(`https://api.waqi.info/feed/geo::${lat};:${lng}/?token=`)
+  var http = new XMLHttpRequest();
+  http.open("GET", `https://api.waqi.info/feed/geo:${lat};${lng}/?token=${WAQI_TOKEN}`, true);
+  http.onreadystatechange = function () {
+    if (http.readyState == 4 && http.status == 200) {
+      var result = JSON.parse(http.response)
+      
+      //let distanceFromLocation = map.distance([e.latlng.lat,e.latlng.lng], result.data.city.geo);
+      console.log(result.data);
+      if(result.status === "ok" && result.data.aqi < 51){
+        
+        console.log(result.data.city.geo);
+        console.log(result.data.aqi);
+        console.log(result.data.name);
+        
+        let good = L.divIcon({ className: 'emoji-icons',
+                                 html: twemoji.parse("😀")+ "<div class='good-aqi'>"+result.data.aqi+" <div class='line'></div></div>" , 
+                                 bgPos:[100,-100] 
+                              })  
+        
+        markerGood = new L.marker(result.data.city.geo,  { icon: good });
+        markerGood.removeFrom(map) ;
+        markerGood.addTo(map);
+      
+  
+      };
+      if(result.status === "ok" && result.data.aqi > 50 && result.data.aqi < 101  ){
+          console.log(result.data.city.geo);
+          console.log(result.data.aqi);
+          console.log(result.data.name);
+          
+          let moderate = L.divIcon({ className: 'emoji-icons',
+                                   html: twemoji.parse("🙁")+ "<div class='mod-aqi'>"+result.data.aqi+" <div class='line'></div></div>" , 
+                                   bgPos:[100,-100] 
+                                })  
+          
+          markerModerate = new L.marker(result.data.city.geo,  { icon: moderate }); 
+          markerModerate.addTo(map);
+        }
+      
+      else{
+        console.log("no data")
+      }
+  
+    
+    };
+  };
+  http.send();
+
+});
+
+
+
 ////////////////////
 //---MAP EVENTS---//
 ///////////////////
@@ -391,3 +457,16 @@ function hazardousAddRemove(){
     getHazardous()
   } 
 }
+
+
+// Map Tiler Geocoding
+var autocomplete = new kt.OsmNamesAutocomplete(
+  'search', 'https://geocoder.tilehosting.com/', 'UrB6eUgP5z7iW5eaEk0j');
+autocomplete.registerCallback(function(item) {
+//alert(JSON.stringify(item, ' ', 2));
+
+console.log(`geocode result: ${item.lon} ${item.lat}`)
+
+map.flyTo([item.lat, item.lon],11)
+
+});

@@ -60,7 +60,6 @@ body , html{
 
 }
 
-
 #container{
   display:flex;
   flex-wrap: wrap;
@@ -72,7 +71,8 @@ body , html{
   display: inline-block;
   flex-grow:1;
   width:120px;
-  border-style: solid; 
+  border-style: solid;
+  border-color: rgb(43, 42, 42); 
   border-width: 3px;
   margin:1px;
 }
@@ -100,6 +100,32 @@ body , html{
   bottom: 0;
   -webkit-transition: .4s;
   transition: .4s;
+}
+
+#toggle-color-1:hover{
+  background: #096;
+
+}
+
+#toggle-color-2:hover{
+  background: #ffde33;
+ 
+}
+
+#toggle-color-3:hover{
+  background: #ff9933
+}
+
+#toggle-color-4:hover{
+  background: #cc0033
+}
+
+#toggle-color-5:hover{
+  background: #660099
+}
+
+#toggle-color-6:hover{
+  background: #7e0023
 }
 
 #toggle-color-1,#toggle-color-2,#toggle-color-3,#toggle-color-4,#toggle-color-5,#toggle-color-6{

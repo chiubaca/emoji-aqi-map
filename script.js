@@ -22,7 +22,7 @@ let goodClusters = L.markerClusterGroup({
         //console.log(clusterItems[items].aqiScore)
         aqiList.push(parseFloat(clusterItems[items].aqiScore))
       }
-      return L.divIcon({ html: '<b>' + mean(aqiList) + '</b>' });
+      return L.divIcon({ className: 'good-cluster' ,html: '≈' + mean(aqiList) });
     }
   });
 let moderateClusters = L.markerClusterGroup();

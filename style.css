@@ -279,3 +279,24 @@ input:checked + #toggle-color-6 {
   text-align:center;
   font-size:20px;  
 }
+
+/* Leaflet Popups override */
+
+.leaflet-popup-content-wrapper{
+  position:fixed;
+  top: 39px;
+  right: -95px;
+
+}
+
+.leaflet-container a.leaflet-popup-close-button{
+  position: fixed;
+  top: 40px;
+  right: -95px;
+}
+
+.leaflet-popup-tip-container{
+  top: 20px;
+  left:4px;
+  transform: rotate(180deg);
+}

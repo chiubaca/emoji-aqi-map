@@ -14,12 +14,39 @@ let vUnhealthyResults = [];
 let hazardousResults = [];
 
 //layers get added to this object to generate clusters
-let goodClusters = L.markerClusterGroup();
+let goodClusters = L.markerClusterGroup({
+    iconCreateFunction: function(cluster) {
+      let clusterItems = cluster.getAllChildMarkers()
+      let aqiList = []; 
+      for (let items in clusterItems ){
+        //console.log(clusterItems[items].aqiScore)
+        aqiList.push(parseFloat(clusterItems[items].aqiScore))
+      }
+      return L.divIcon({ html: '<b>' + mean(aqiList) + '</b>' });
+    }
+  });
 let moderateClusters = L.markerClusterGroup();
 let sensitiveClusters = L.markerClusterGroup();
 let unhealthyClusters =  L.markerClusterGroup();
 let vUnhealthyClusters = L.markerClusterGroup();
 let hazardousClusters = L.markerClusterGroup();
+
+goodClusters.on('clusterclick', function (a) {
+  
+  let aqiList = [];
+
+  let clusterObj = a.layer.getAllChildMarkers();
+  
+  for (let obj in clusterObj){
+    console.log( clusterObj[obj].aqiScore)
+    aqiList.push(parseFloat(clusterObj[obj].aqiScore))
+   
+  }
+   
+  console.log(mean(aqiList))
+
+});
+
 
 //Initiate Map and layers...
 let map = L.map('mapid').setView([51.505, -0.09], 7);
@@ -31,8 +58,9 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
 }).addTo(map)
 
+//Helper functions
 
-// Helper function to reset layers from an array of marker object
+//Reset layers from an array of marker object
 function removeLayers(layersArray){
   for(i=0;i<layersArray.length;i++) {
     map.removeLayer(layersArray[i]);
@@ -43,7 +71,19 @@ function removeLayers(layersArray){
   unhealthyResults=[];
   vUnhealthyResults = [];
   hazardousResults = [];
+}
 
+//Find Mean from a list of numbers 
+//args: a list of numbers
+
+function mean(numbers) {
+  // mean of [3, 5, 4, 4, 1, 1, 2, 3] is 2.875
+  var total = 0,
+      i;
+  for (i = 0; i < numbers.length; i += 1) {
+      total += numbers[i];
+  }
+  return Math.round(total / numbers.length);
 }
 
 /////////////////////
@@ -56,7 +96,8 @@ function getGood() {
   removeLayers(goodResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
-  var http = new XMLHttpRequest();
+  let aqiScore
+  let http = new XMLHttpRequest();
   http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
   http.onreadystatechange = function () {
     if (http.readyState == 4 && http.status == 200) {
@@ -68,7 +109,11 @@ function getGood() {
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
+          marker.aqiScore = result.data[i].aqi;
           goodResults.push(marker)
+          // testing pop-ups
+          marker.bindPopup("test")
+
         }
       };
     
@@ -244,9 +289,8 @@ function closestStationInfo(){
   return;
 }
 
-
+//TODO: click to get closest station 
 map.on('click', function(e) {
-
 
   let lat = e.latlng.lat;
   let lng = e.latlng.lng;
@@ -300,6 +344,8 @@ map.on('click', function(e) {
   http.send();
 
 });
+
+
 
 
 
@@ -368,6 +414,9 @@ map.on('moveend',function(){
     console.log("Hazardous is not checked")
   } 
 })
+
+
+//Get info about station
 
 
 //////////////////////////

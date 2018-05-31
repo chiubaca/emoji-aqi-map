@@ -18,34 +18,90 @@ let goodClusters = L.markerClusterGroup({
     iconCreateFunction: function(cluster) {
       let clusterItems = cluster.getAllChildMarkers()
       let aqiList = []; 
+      let opacityLookup = numberRange(0,50);
       for (let items in clusterItems ){
         //console.log(clusterItems[items].aqiScore)
         aqiList.push(parseFloat(clusterItems[items].aqiScore))
       }
-      return L.divIcon({ className: 'good-cluster' ,html: '≈' + mean(aqiList) });
+      return L.divIcon({ className: 'good-cluster',html: "<span style='background: rgba(0, 153, 102,+"+ normalise(mean(aqiList),opacityLookup.length) + ")'>" + '≈' + mean(aqiList) + "</span>" });
     }
   });
-let moderateClusters = L.markerClusterGroup();
-let sensitiveClusters = L.markerClusterGroup();
-let unhealthyClusters =  L.markerClusterGroup();
-let vUnhealthyClusters = L.markerClusterGroup();
-let hazardousClusters = L.markerClusterGroup();
 
-goodClusters.on('clusterclick', function (a) {
-  
-  let aqiList = [];
-
-  let clusterObj = a.layer.getAllChildMarkers();
-  
-  for (let obj in clusterObj){
-    console.log( clusterObj[obj].aqiScore)
-    aqiList.push(parseFloat(clusterObj[obj].aqiScore))
-   
+let moderateClusters = L.markerClusterGroup({
+    iconCreateFunction: function(cluster) {
+    
+    let clusterItems = cluster.getAllChildMarkers()
+    let aqiList = []; 
+    let opacityLookup = numberRange(50,100);
+    for (let items in clusterItems ){
+      //console.log(clusterItems[items].aqiScore)
+      aqiList.push(parseFloat(clusterItems[items].aqiScore))
+    }
+    return L.divIcon({ className: 'moderate-cluster',html: "<span style='background: rgba(255, 221, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-1.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
-   
-  console.log(mean(aqiList))
-
 });
+
+let sensitiveClusters = L.markerClusterGroup({
+  iconCreateFunction: function(cluster) {
+    let clusterItems = cluster.getAllChildMarkers()
+    let aqiList = []; 
+    let opacityLookup = numberRange(100,150);
+    for (let items in clusterItems ){
+      //console.log(clusterItems[items].aqiScore)
+      aqiList.push(parseFloat(clusterItems[items].aqiScore))
+    }
+    return L.divIcon({ className: 'sensitive-cluster',html: "<span style='background: rgba(255, 153, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-2.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
+  }
+});
+
+let unhealthyClusters =  L.markerClusterGroup({
+  iconCreateFunction: function(cluster) {
+    let clusterItems = cluster.getAllChildMarkers()
+    let aqiList = []; 
+    let opacityLookup = numberRange(151,200);
+    for (let items in clusterItems ){
+      //console.log(clusterItems[items].aqiScore)
+      aqiList.push(parseFloat(clusterItems[items].aqiScore))
+    }
+    return L.divIcon({ className: 'unhealthy-cluster',html: "<span style='background: rgba(204, 0, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-3.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
+  }
+});
+let vUnhealthyClusters = L.markerClusterGroup({
+    iconCreateFunction: function(cluster) {
+      let clusterItems = cluster.getAllChildMarkers()
+      let aqiList = []; 
+      let opacityLookup = numberRange(201,300);
+      for (let items in clusterItems ){
+        //console.log(clusterItems[items].aqiScore)
+        aqiList.push(parseFloat(clusterItems[items].aqiScore))
+      }
+      return L.divIcon({ className: 'v-unhealthy-cluster',html: "<span style='background: rgba(102, 0, 153,+"+ ((normalise(mean(aqiList),opacityLookup.length))-1.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
+    }
+  });
+
+let hazardousClusters = L.markerClusterGroup({
+    iconCreateFunction: function(cluster) {
+      let clusterItems = cluster.getAllChildMarkers()
+      let aqiList = []; 
+      let opacityLookup = numberRange(300,999);
+      for (let items in clusterItems ){
+        //console.log(clusterItems[items].aqiScore)
+        aqiList.push(parseFloat(clusterItems[items].aqiScore))
+      }
+      return L.divIcon({ className: 'hazardous-cluster',html: "<span style='background: rgba(126, 0, 35,+"+ ((normalise(mean(aqiList),opacityLookup.length))) + ")'>" + '≈' + mean(aqiList) + "</span>" });
+    }
+  });
+
+//// Cluster on click mess around
+// goodClusters.on('clusterclick', function (a) {
+//   let aqiList = [];
+//   let clusterObj = a.layer.getAllChildMarkers();
+//   for (let obj in clusterObj){
+//     console.log( clusterObj[obj].aqiScore)
+//     aqiList.push(parseFloat(clusterObj[obj].aqiScore))
+//   }
+//   console.log(mean(aqiList));
+// });
 
 
 //Initiate Map and layers...
@@ -58,7 +114,9 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
 }).addTo(map)
 
-//Helper functions
+/////////////////////
+//Helper functions//
+///////////////////
 
 //Reset layers from an array of marker object
 function removeLayers(layersArray){
@@ -74,8 +132,6 @@ function removeLayers(layersArray){
 }
 
 //Find Mean from a list of numbers 
-//args: a list of numbers
-
 function mean(numbers) {
   // mean of [3, 5, 4, 4, 1, 1, 2, 3] is 2.875
   var total = 0,
@@ -86,9 +142,22 @@ function mean(numbers) {
   return Math.round(total / numbers.length);
 }
 
+//Outputs a range used to for producing a normalised number used for opacity value
+function numberRange (lowAQI, topAQI) {
+  return new Array(topAQI - lowAQI).fill().map((d, i) => i + lowAQI);
+}
+
+//Normalised score
+function normalise(x,y){
+  return x/y
+}
+
+
 /////////////////////
 //--DATA FUNCTIONS//
 ///////////////////
+
+//TO DO: Too much repeated code. Make it more DRY.
 
 //Good scores: AQI < 50 
 function getGood() {
@@ -116,8 +185,6 @@ function getGood() {
 
         }
       };
-    
-
       //Clustering 
       goodClusters.clearLayers()
       goodClusters.addLayer( L.layerGroup(goodResults))
@@ -146,6 +213,7 @@ function getModerate() {
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
+          marker.aqiScore = result.data[i].aqi;
           moderateResults.push(marker)
         }
       };
@@ -177,6 +245,7 @@ function getSensitive() {
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
+          marker.aqiScore = result.data[i].aqi;
           sensitiveResults.push(marker)
         }
       };
@@ -208,6 +277,7 @@ function getUnhealthy() {
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: unhealthy });
+          marker.aqiScore = result.data[i].aqi;
           unhealthyResults.push(marker)
         }
       };
@@ -239,6 +309,7 @@ function getVUnhealthy() {
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: vUnhealthy });
+          marker.aqiScore = result.data[i].aqi;
           vUnhealthyResults.push(marker)
         }
       };
@@ -271,6 +342,7 @@ function getHazardous() {
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: hazard });
+          marker.aqiScore = result.data[i].aqi;
           hazardousResults.push(marker)
         }
       };
@@ -282,71 +354,6 @@ function getHazardous() {
   };
   http.send();
 };
-
-
-//Info About Closest Station
-function closestStationInfo(){
-  return;
-}
-
-//TODO: click to get closest station 
-map.on('click', function(e) {
-
-  let lat = e.latlng.lat;
-  let lng = e.latlng.lng;
-  //console.log(`https://api.waqi.info/feed/geo::${lat};:${lng}/?token=`)
-  var http = new XMLHttpRequest();
-  http.open("GET", `https://api.waqi.info/feed/geo:${lat};${lng}/?token=${WAQI_TOKEN}`, true);
-  http.onreadystatechange = function () {
-    if (http.readyState == 4 && http.status == 200) {
-      var result = JSON.parse(http.response)
-      
-      //let distanceFromLocation = map.distance([e.latlng.lat,e.latlng.lng], result.data.city.geo);
-      console.log(result.data);
-      if(result.status === "ok" && result.data.aqi < 51){
-        
-        console.log(result.data.city.geo);
-        console.log(result.data.aqi);
-        console.log(result.data.name);
-        
-        let good = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("😀")+ "<div class='good-aqi'>"+result.data.aqi+" <div class='line'></div></div>" , 
-                                 bgPos:[100,-100] 
-                              })  
-        
-        markerGood = new L.marker(result.data.city.geo,  { icon: good });
-        markerGood.removeFrom(map) ;
-        markerGood.addTo(map);
-      
-  
-      };
-      if(result.status === "ok" && result.data.aqi > 50 && result.data.aqi < 101  ){
-          console.log(result.data.city.geo);
-          console.log(result.data.aqi);
-          console.log(result.data.name);
-          
-          let moderate = L.divIcon({ className: 'emoji-icons',
-                                   html: twemoji.parse("🙁")+ "<div class='mod-aqi'>"+result.data.aqi+" <div class='line'></div></div>" , 
-                                   bgPos:[100,-100] 
-                                })  
-          
-          markerModerate = new L.marker(result.data.city.geo,  { icon: moderate }); 
-          markerModerate.addTo(map);
-        }
-      
-      else{
-        console.log("no data")
-      }
-  
-    
-    };
-  };
-  http.send();
-
-});
-
-
-
 
 
 ////////////////////
@@ -416,7 +423,7 @@ map.on('moveend',function(){
 })
 
 
-//Get info about station
+//TODO: Get info about station on click
 
 
 //////////////////////////
@@ -508,14 +515,10 @@ function hazardousAddRemove(){
 }
 
 
-// Map Tiler Geocoding
+// Map Tiler Geocoding Service //
 var autocomplete = new kt.OsmNamesAutocomplete(
   'search', 'https://geocoder.tilehosting.com/', 'UrB6eUgP5z7iW5eaEk0j');
 autocomplete.registerCallback(function(item) {
-//alert(JSON.stringify(item, ' ', 2));
-
 console.log(`geocode result: ${item.lon} ${item.lat}`)
-
 map.flyTo([item.lat, item.lon],11)
-
 });

@@ -39,61 +39,60 @@
 </head>
 
 <body>
-      
-        <input autocomplete="off" id="search" value="London" placeholder="Search for pollution levels in your area..."/>
-        <script>
-             
-        </script>
 
-    <div id="mapid">
-      
-
-    </div>
-
+<div id="mapid">
+    
+    <!-- Location Search -->
+    <input autocomplete="off" id="search" value="London" placeholder=" 🔍Search for pollution levels in your area..."/>
+    
+    <!-- Toggle buttons -->
     <div id="container" style="font-family:'Segoe UI';">
 
-        <label class="good switch" >
+        <label class="switch" >
             <input type="checkbox" id="goodCheck" onchange="goodAddRemove()">
             <span class="toggle" id="toggle-color-1">
-                <p>Good 😀</p>
+                <p>😀</p>
             </span>      
         </label>
 
         <label class="switch">
             <input type="checkbox" id="modCheck" onchange="modAddRemove()">
             <span class="toggle" id="toggle-color-2">
-                <p>Moderate 🙁</p>
+                <p>🙁</p>
             </span>
         </label>
 
         <label class="switch">
             <input type="checkbox" id="sensCheck" onchange="sensitiveAddRemove()">
             <span class="toggle" id="toggle-color-3">
-                <p>Sensitive 😨</p>
+                <p>😨</p>
             </span>
         </label>
 
         <label class="switch">
             <input type="checkbox" id="unhealthyCheck" onchange="unhealtyAddRemove()">
             <span class="toggle" id="toggle-color-4">
-                <p>Unhealthy 😷</p>
+                <p>😷</p>
             </span>
         </label>
 
         <label class="switch">
             <input type="checkbox" id="vUnhealthyCheck" onchange="vUnhealtyAddRemove()">
             <span class="toggle" id="toggle-color-5">
-                <p>Very Unhealthy 🤢</p>
+                <p>🤢</p>
             </span>
         </label>
 
         <label class="switch">
             <input type="checkbox" id="hazardousCheck" onchange="hazardousAddRemove()">
             <span class="toggle" id="toggle-color-6">
-                <p>Hazardous 💀</p>
+                <p>💀</p>
             </span>
         </label>
     </div>
+</div>
+
+   
 
 
 </body>

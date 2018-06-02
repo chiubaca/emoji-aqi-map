@@ -56,7 +56,26 @@ body , html{
 }
 
 #mapid {    
-    height: 100%;
+    height: 95%;
+}
+
+header{
+  z-index: 999;
+  position: relative;
+
+  height:2em;
+}
+
+header #title{
+  font-size:1.5em;
+  margin: 0
+}
+
+header #sub-title{
+  font-size:1em;
+  margin: 0;
+	padding: 0;
+	border: 0;
 }
 
 
@@ -74,15 +93,9 @@ body , html{
 
 .switch {
   position: relative;
-  /* border-top: 3px solid #2b2a2a; 
-  border-right: 3px solid #2b2a2a; 
-  border-bottom: 3px solid #2b2a2a; */
-    border-top-right-radius: 30%;
   padding:10px; 
   margin: 2px 0 5px 0;
-   	
-
-  top: 30%;
+  top: 25%;
 }
 
 .emoji {
@@ -90,25 +103,31 @@ body , html{
   
 }
 
-/* text centering in toggles */
+/* text position */
 .switch p {
-  text-align:center;
   margin: 0;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 84%;
   margin-right: -50%;
   transform: translate(-50%, -50%)  
 }
 
+
+
 .toggle {
   position: absolute;
   top: 0;
-  left: 0;
+  left: -110;
   right: 0;
   bottom: 0;
-  -webkit-transition: .4s;
-  transition: .4s;
+  width: 13em;
+  -webkit-transition: .10s ease;
+  transition: .20s ease;
+}
+
+.toggle:hover{
+ left:0
 }
 
 #toggle-color-1:hover{
@@ -137,8 +156,8 @@ body , html{
 
 #toggle-color-1,#toggle-color-2,#toggle-color-3,#toggle-color-4,#toggle-color-5,#toggle-color-6{
   background:grey;
-  border-top-right-radius: 25%;
-  border-bottom-right-radius: 25%;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 } 
 
 input:checked + #toggle-color-1 {
@@ -314,17 +333,22 @@ input:checked + #toggle-color-6 {
 .ac-active {background-color: #eee;}
 
 #search{
-  width:100%;
+  width:15em;
+  height:2em;
   text-align:center;
   font-size:20px;
   z-index: 999;
   position: relative;
+
+  top:0.5em;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16),0 0 0 1px rgba(0,0,0,0.08); 
+  transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 /* Leaflet Popups override */
 
 .leaflet-popup-content-wrapper{
-  position:fixed;
+  position:static;
   top: 39px;
   right: -95px;
 

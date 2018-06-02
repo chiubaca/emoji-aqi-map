@@ -57,8 +57,10 @@ body , html{
 
 #mapid {    
     height: 80%;
-
 }
+
+
+/* Toggle Switches */
 
 #container{
   display:flex;
@@ -70,7 +72,6 @@ body , html{
   position: relative;
   display: inline-block;
   flex-grow:1;
-  width:120px;
   border-style: solid;
   border-color: rgb(43, 42, 42); 
   border-width: 3px;
@@ -78,7 +79,7 @@ body , html{
 }
 
 .emoji {
-  height:20px
+  height:1.2rem
 }
 
 /* text centering in toggles */
@@ -104,12 +105,10 @@ body , html{
 
 #toggle-color-1:hover{
   background: #096;
-
 }
 
 #toggle-color-2:hover{
   background: #ffde33;
- 
 }
 
 #toggle-color-3:hover{
@@ -154,79 +153,47 @@ input:checked + #toggle-color-6 {
 
 /* AQI symbol markers */
 
+.good{
+  background-color: rgb(89, 182, 151);
+  padding: 1px 5px 0 5px;
+}
+
+.moderate{
+  background-color: #ffde33;
+  padding: 1px 5px 0 5px;
+}
+
+.sensitive{
+  background-color: #ff9933;
+  padding: 1px 5px 0 5px;
+}
+
+.unhealty{
+  background-color: #cc0033;
+  padding: 1px 9px 0 5px;
+}
+
+.v-unhealty{
+  background-color: #660099;
+  padding: 1px 9px 0 5px;
+}
+
+.hazardous{
+  background-color: #7e0023;
+  padding: 1px 10px 0 5px;
+}
+
 .emoji-icons{
   font-size:15px;
 }
 
-.good-aqi{
+.aqi-flag{
   text-align:center;
-  background-color: rgba(0, 153, 102, 0.925);
   border: white;
   border-style: solid;
   width: 20px;
   color: rgb(20, 16, 16);
   border-radius: 5px;
-  padding: 1px 5px 0 5px;
-  margin: -55px 0 0 -8px;
-}
-
-.mod-aqi{
-  text-align:center;
-  background-color: #ffde33;
-  border: white;
-  border-style: solid;
-  width: 20px;
-  color: black;
-  border-radius: 5px;
-  padding: 1px 5px 0 5px;
-  margin: -55px 0 0 -8px;
-}
-
-.sens-aqi{
-  text-align:center;
-  background-color: #ff9933;
-  border: white;
-  border-style: solid;
-  width: 20px;
-  color: black;
-  border-radius: 5px;
-  padding: 1px 5px 0 5px;
-  margin: -55px 0 0 -8px;
-}
-
-.unhealty-aqi{
-  text-align:center;
-  background-color: #cc0033;
-  border: white;
-  border-style: solid;
-  width: 20px;
-  color: black;
-  border-radius: 5px;
-  padding: 1px 5px 0 5px;
-  margin: -55px 0 0 -8px;
-}
-
-.v-unhealty-aqi{
-  text-align:center;
-  background-color: #660099;
-  border: white;
-  border-style: solid;
-  width: 20px;
-  color: black;
-  border-radius: 5px;
-  padding: 1px 10px 0 5px;
-  margin: -55px 0 0 -8px;
-}
-
-.hazardous-aqi{
-  text-align:center;
-  background-color: #7e0023;
-  border: white;
-  border-style: solid;
-  width: 20px;
-  color: black;
-  border-radius: 5px;
-  padding: 1px 10px 0 5px;
   margin: -55px 0 0 -8px;
 }
 

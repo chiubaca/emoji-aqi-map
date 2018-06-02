@@ -174,7 +174,7 @@ function getGood() {
       for (i in result.data) {
         if (result.data[i].aqi < 50){
           let good = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("😀")+ "<div class='good-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("😀")+ "<div class='aqi-flag good'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
@@ -209,7 +209,7 @@ function getModerate() {
         if (result.data[i].aqi < 100 && result.data[i].aqi > 51){
           
           let moderate = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("🙁")+ "<div class='mod-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("🙁")+ "<div class='aqi-flag moderate'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
@@ -241,7 +241,7 @@ function getSensitive() {
         if (result.data[i].aqi < 150 && result.data[i].aqi > 101){
             
           let moderate = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("😨")+ "<div class='sens-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("😨")+ "<div class='aqi-flag sensitive'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
@@ -273,7 +273,7 @@ function getUnhealthy() {
         if (result.data[i].aqi < 200 && result.data[i].aqi > 151){
             
           let unhealthy = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("😷")+ "<div class='unhealty-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("😷")+ "<div class='aqi-flag unhealty'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: unhealthy });
@@ -305,7 +305,7 @@ function getVUnhealthy() {
         if (result.data[i].aqi < 300 && result.data[i].aqi > 201){
             
           let vUnhealthy = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("🤢")+ "<div class='v-unhealty-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("🤢")+ "<div class='aqi-flag v-unhealty'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: vUnhealthy });
@@ -338,7 +338,7 @@ function getHazardous() {
         if (result.data[i].aqi > 300){
             
           let hazard = L.divIcon({ className: 'emoji-icons',
-                                 html: twemoji.parse("💀")+ "<div class='hazardous-aqi'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
+                                 html: twemoji.parse("💀")+ "<div class='aqi-flag hazardous'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
                                  bgPos:[100,-100] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: hazard });

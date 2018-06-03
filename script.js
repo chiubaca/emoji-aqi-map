@@ -3,7 +3,7 @@ twemoji.parse(document.body);
 
 const WAQI_TOKEN = "ce79b4fab3208523b358a65b2eccc4ca6b84b269";
 const WAQI_URL = "https://tiles.waqi.info/tiles/usepa-aqi/{z}/{x}/{y}.png?token=" + WAQI_TOKEN;
-const WAQI_ATTR = 'Air  Quality  Tiles  &copy;  <a  href="http://waqi.info">waqi.info</a>';
+const WAQI_ATTR = ' World Air Quality Index  &copy;  <a  href="http://waqi.info">waqi.info</a>';
 
 //Arrays to store markers for each classification;
 let goodResults = [];
@@ -40,7 +40,6 @@ let moderateClusters = L.markerClusterGroup({
     return L.divIcon({ className: 'moderate-cluster',html: "<span style='background: rgba(255, 221, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-1.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
 });
-
 let sensitiveClusters = L.markerClusterGroup({
   iconCreateFunction: function(cluster) {
     let clusterItems = cluster.getAllChildMarkers()
@@ -53,7 +52,6 @@ let sensitiveClusters = L.markerClusterGroup({
     return L.divIcon({ className: 'sensitive-cluster',html: "<span style='background: rgba(255, 153, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-2.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
 });
-
 let unhealthyClusters =  L.markerClusterGroup({
   iconCreateFunction: function(cluster) {
     let clusterItems = cluster.getAllChildMarkers()
@@ -108,7 +106,7 @@ let hazardousClusters = L.markerClusterGroup({
 let map = L.map('mapid',{ zoomControl:false }).setView([51.505, -0.09], 7);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>,'+ WAQI_ATTR,
   maxZoom: 18,
   id: 'mapbox.light',
   accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'

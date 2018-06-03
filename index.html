@@ -39,19 +39,18 @@
 </head>
 
 <body>
+  <!-- Location Search -->
+  <input autocomplete="off" id="search" value="London" placeholder=" 🔍Search"/>
 
 <div id="mapid">
+  
     <header>
         <div id="title" >Air Pollution in the World</div>
         <div id="sub-title" >Real-time Air Quality Index (AQI)</div>
-        <input autocomplete="off" id="search" value="London" placeholder=" 🔍Search"/>
-
     </header>
 
-    <!-- Location Search -->
- 
     <!-- Toggle buttons -->
-    <div id="container" style="font-family:'Segoe UI';">
+    <div id="container">
 
         <label class="switch" >
             <input type="checkbox" id="goodCheck" onchange="goodAddRemove()">

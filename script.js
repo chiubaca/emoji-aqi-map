@@ -185,7 +185,7 @@ function getGood() {
           marker.aqiScore = result.data[i].aqi;
           goodResults.push(marker)
           // testing pop-ups
-          marker.bindPopup("test")
+          //marker.bindPopup("test")
 
         }
       };

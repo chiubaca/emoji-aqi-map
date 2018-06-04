@@ -166,19 +166,22 @@ function getGood() {
         if (result.data[i].aqi < 50){
           let good = L.divIcon({ className: 'emoji-icons',
                                  html: twemoji.parse("😀")+ "<div class='aqi-flag good'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
-                                 bgPos:[100,-100],
-                                 popupAnchor: [5, 90] 
+                               
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
           marker.aqiScore = result.data[i].aqi;
           goodResults.push(marker)
-          // testing pop-ups
+      
         
           marker.on("click", function(event){
-            marker.bindPopup("test")
-            // alert("test")
-            marker.openPopup();
+            // marker.bindPopup("test")
+            // // alert("test")
+            // marker.openPopup();
             console.log(event)
+            var popup = L.popup()
+            .setLatLng(event.latlng)
+            .setContent('<p>Hello world!<br />This is a nice popup.</p>')
+            .openOn(map);
 
           })
 

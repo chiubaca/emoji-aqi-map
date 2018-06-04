@@ -366,21 +366,23 @@ input:checked + #toggle-color-6 {
 
 /* Leaflet Popups override */
 
-/* .leaflet-popup-content-wrapper{
-  position:static;
-  top: 179px;
-  right: -95px;
+.leaflet-popup-content-wrapper{
+  position:relative;
+  top: 127px;
+  right: -14px;
 
-} */
+}
 
-/* .leaflet-container a.leaflet-popup-close-button{
-  position: fixed;
-  top: 40px;
-  right: -95px;
-} */
+.leaflet-container a.leaflet-popup-close-button{
+  position: relative;
+  top: 58px;
+  right: -89px;
+
+}
 
 .leaflet-popup-tip-container{
-  top: -20px;
+  top:107px;
+  left: 89px;
   transform: rotate(180deg);
 }
 

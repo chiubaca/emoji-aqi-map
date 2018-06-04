@@ -90,18 +90,6 @@ let hazardousClusters = L.markerClusterGroup({
     }
   });
 
-//// Cluster on click mess around
-// goodClusters.on('clusterclick', function (a) {
-//   let aqiList = [];
-//   let clusterObj = a.layer.getAllChildMarkers();
-//   for (let obj in clusterObj){
-//     console.log( clusterObj[obj].aqiScore)
-//     aqiList.push(parseFloat(clusterObj[obj].aqiScore))
-//   }
-//   console.log(mean(aqiList));
-// });
-
-
 //Initiate Map and layers...
 let map = L.map('mapid',{ zoomControl:false }).setView([51.505, -0.09], 7);
 
@@ -156,7 +144,6 @@ function normalise(x,y){
   return x/y
 }
 
-
 /////////////////////
 //--DATA FUNCTIONS//
 ///////////////////
@@ -179,13 +166,21 @@ function getGood() {
         if (result.data[i].aqi < 50){
           let good = L.divIcon({ className: 'emoji-icons',
                                  html: twemoji.parse("😀")+ "<div class='aqi-flag good'>"+result.data[i].aqi+" <div class='line'></div></div>" , 
-                                 bgPos:[100,-100] 
+                                 bgPos:[100,-100],
+                                 popupAnchor: [5, 90] 
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
           marker.aqiScore = result.data[i].aqi;
           goodResults.push(marker)
           // testing pop-ups
-          //marker.bindPopup("test")
+        
+          marker.on("click", function(event){
+            marker.bindPopup("test")
+            // alert("test")
+            marker.openPopup();
+            console.log(event)
+
+          })
 
         }
       };

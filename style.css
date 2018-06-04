@@ -109,13 +109,21 @@ header #sub-title{
 .switch p {
   margin: 0;
   position: absolute;
-  top: 50%;
+  top: 32%;
   left: 84%;
   margin-right: -50%;
   transform: translate(-50%, -50%)  
 }
 
+.label{
 
+  margin: 0;
+  position: absolute;
+  top: 78%;
+  left: 84%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)  
+}
 
 .toggle {
   position: absolute;
@@ -129,16 +137,13 @@ header #sub-title{
 }
 
 .toggle:hover{
- left:0
+ left:1px
 }
 
 .toggle:active{
-  left:0
+  left:1px
  }
 
- .toggle:focus{
-  left:0
- }
 
 #toggle-color-1:hover{
   background: #096;
@@ -168,6 +173,7 @@ header #sub-title{
   background:grey;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  margin:-1px
 } 
 
 input:checked + #toggle-color-1 {
@@ -360,22 +366,21 @@ input:checked + #toggle-color-6 {
 
 /* Leaflet Popups override */
 
-.leaflet-popup-content-wrapper{
+/* .leaflet-popup-content-wrapper{
   position:static;
-  top: 39px;
+  top: 179px;
   right: -95px;
 
-}
+} */
 
-.leaflet-container a.leaflet-popup-close-button{
+/* .leaflet-container a.leaflet-popup-close-button{
   position: fixed;
   top: 40px;
   right: -95px;
-}
+} */
 
 .leaflet-popup-tip-container{
-  top: 20px;
-  left:4px;
+  top: -20px;
   transform: rotate(180deg);
 }
 

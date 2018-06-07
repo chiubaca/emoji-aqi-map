@@ -39,7 +39,7 @@ let moderateClusters = L.markerClusterGroup({
     }
     return L.divIcon({ className: 'moderate-cluster',html: "<span style='background: rgba(255, 221, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-1.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
-});
+ });
 let sensitiveClusters = L.markerClusterGroup({
   iconCreateFunction: function(cluster) {
     let clusterItems = cluster.getAllChildMarkers()
@@ -51,7 +51,7 @@ let sensitiveClusters = L.markerClusterGroup({
     }
     return L.divIcon({ className: 'sensitive-cluster',html: "<span style='background: rgba(255, 153, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-2.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
-});
+ });
 let unhealthyClusters =  L.markerClusterGroup({
   iconCreateFunction: function(cluster) {
     let clusterItems = cluster.getAllChildMarkers()
@@ -63,7 +63,7 @@ let unhealthyClusters =  L.markerClusterGroup({
     }
     return L.divIcon({ className: 'unhealthy-cluster',html: "<span style='background: rgba(204, 0, 51,+"+ ((normalise(mean(aqiList),opacityLookup.length))-3.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
-});
+ });
 let vUnhealthyClusters = L.markerClusterGroup({
     iconCreateFunction: function(cluster) {
       let clusterItems = cluster.getAllChildMarkers()
@@ -90,7 +90,8 @@ let hazardousClusters = L.markerClusterGroup({
     }
   });
 
-//Initiate Map and layers...
+
+  //Initiate Map and layers...
 let map = L.map('mapid',{ zoomControl:false }).setView([51.505, -0.09], 7);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -137,12 +138,80 @@ function mean(numbers) {
 //Outputs a range used to for producing a normalised number used for opacity value
 function numberRange (lowAQI, topAQI) {
   return new Array(topAQI - lowAQI).fill().map((d, i) => i + lowAQI);
-}
+};
 
 //Normalised score
 function normalise(x,y){
-  return x/y
-}
+  return x/y;
+};
+
+//Popup with additional AQI data
+
+function dataPopup(onClickEvent){
+  // let lat = onClickEvent.latlng.lat;
+  // let lng = onClickEvent.latlng.lng;
+  console.log(`https://api.waqi.info/feed/geo:${onClickEvent.latlng.lat};${onClickEvent.latlng.lng}/?token=${WAQI_TOKEN}`); 
+  
+  fetch(`https://api.waqi.info/feed/geo:${onClickEvent.latlng.lat};${onClickEvent.latlng.lng}/?token=${WAQI_TOKEN}`)
+    .then(function(response) {
+        if(response.ok){
+          console.log(response)
+          return response.json()
+        }
+        throw new Error('Network response was not ok.');  
+      }).then(function(resObj){
+        if(resObj.data != null){
+          console.log(resObj);
+            let popup = L.popup({
+              autoPanPaddingTopLeft:L.point(0, -100),
+              minWidth:250,
+              maxWidth:250,
+              maxHeight:100,
+            })
+            .setLatLng(onClickEvent.latlng)
+            .setContent(
+                         ` 
+                         <h1> <a target="_blank" href=${String(resObj.data.city.url)}>${resObj.data.city.name}</a> </h1>
+                         <h2>(Last Updated: ${String(resObj.data.time.s)})</h2>
+                         <br/> 
+                         <h3>Data Source :
+                         <a target="_blank" href=${String(resObj.data.attributions[0].url)}>${resObj.data.attributions[0].name}</a> 
+                         </h3>
+                         `
+                       )
+            .openOn(map);
+
+          ////TO DO: CHART JS, need to loop through iaqi object to populate data labels
+          //   var ctx = document.getElementById('myChart').getContext('2d');
+          //   var chart = new Chart(ctx, {
+          //   // The type of chart we want to create
+          //   type: 'radar',
+
+          // // The data for our dataset
+          //     data: {
+          //         labels: ["PM25", "PM10", "No2", "O3"],
+          //         datasets: [{
+          //             label: "Pollution Levels (ug/m3)",
+          //             backgroundColor: 'rgb(255, 99, 132)',
+          //             borderColor: 'rgb(255, 99, 132)',
+          //             data: [5, 5, 5, 5],
+          //         }]
+          //     },
+
+          //     // Configuration options go here
+          //     options: {
+               
+          //     }
+          //     });
+          //     //  CHART JS End
+              }else{
+                console.log("Problem getting data")
+              };           
+    })
+    .catch(function(error) {
+      console.log('request failed', error)
+});
+};
 
 /////////////////////
 //--DATA FUNCTIONS//
@@ -170,21 +239,11 @@ function getGood() {
                               })          
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: good });
           marker.aqiScore = result.data[i].aqi;
-          goodResults.push(marker)
+          goodResults.push(marker);
       
-        
-          marker.on("click", function(event){
-            // marker.bindPopup("test")
-            // // alert("test")
-            // marker.openPopup();
-            console.log(event)
-            var popup = L.popup()
-            .setLatLng(event.latlng)
-            .setContent('<p>Hello world!<br />This is a nice popup.</p>')
-            .openOn(map);
-
-          })
-
+          marker.on("click", function(event){ 
+            dataPopup(event);
+            }); 
         }
       };
       //Clustering 
@@ -217,12 +276,17 @@ function getModerate() {
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
           marker.aqiScore = result.data[i].aqi;
           moderateResults.push(marker)
+
+          marker.on("click", function(event){ 
+            dataPopup(event);
+            }); 
         }
       };
       //Clustering 
       moderateClusters.clearLayers()
       moderateClusters.addLayer( L.layerGroup(moderateResults))
       map.addLayer(moderateClusters);
+      
     };
   };
   http.send();
@@ -249,6 +313,10 @@ function getSensitive() {
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: moderate });
           marker.aqiScore = result.data[i].aqi;
           sensitiveResults.push(marker)
+
+          marker.on("click", function(event){ 
+            dataPopup(event);
+            }); 
         }
       };
       //Clustering 
@@ -281,6 +349,10 @@ function getUnhealthy() {
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: unhealthy });
           marker.aqiScore = result.data[i].aqi;
           unhealthyResults.push(marker)
+
+          marker.on("click", function(event){ 
+            dataPopup(event);
+            }); 
         }
       };
       //Clustering 
@@ -313,6 +385,10 @@ function getVUnhealthy() {
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: vUnhealthy });
           marker.aqiScore = result.data[i].aqi;
           vUnhealthyResults.push(marker)
+
+          marker.on("click", function(event){ 
+            dataPopup(event);
+            }); 
         }
       };
       //Clustering 
@@ -346,6 +422,10 @@ function getHazardous() {
           marker = new L.marker([result.data[i].lat, result.data[i].lon],  { icon: hazard });
           marker.aqiScore = result.data[i].aqi;
           hazardousResults.push(marker)
+
+          marker.on("click", function(event){ 
+            dataPopup(event);
+            }); 
         }
       };
       //Clustering 

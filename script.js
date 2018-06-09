@@ -92,6 +92,7 @@ let hazardousClusters = L.markerClusterGroup({
 
 
   //Initiate Map and layers...
+console.log("Loading map") 
 let map = L.map('mapid',{ zoomControl:false }).setView([51.505, -0.09], 7);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -155,13 +156,21 @@ function dataPopup(onClickEvent){
   fetch(`https://api.waqi.info/feed/geo:${onClickEvent.latlng.lat};${onClickEvent.latlng.lng}/?token=${WAQI_TOKEN}`)
     .then(function(response) {
         if(response.ok){
-          console.log(response)
+          //console.log(response)
           return response.json()
         }
         throw new Error('Network response was not ok.');  
       }).then(function(resObj){
         if(resObj.data != null){
-          console.log(resObj);
+          console.log(resObj)
+          //TODO: Loop through attributions: 
+          //Check resObj.data.attribution array is > 1 
+          //Then push all items in array somewhere
+          console.log(resObj.data.attributions);
+          //TODO:Loop through all object in iaqi object 
+          //forEach over all values in resObj.data.iaqi  
+          //Then push data somewhere - Can then be used in a chart.
+          console.log(resObj.data.iaqi);
             let popup = L.popup({
               autoPanPaddingTopLeft:L.point(0, -100),
               minWidth:250,
@@ -180,7 +189,6 @@ function dataPopup(onClickEvent){
                          `
                        )
             .openOn(map);
-
           ////TO DO: CHART JS, need to loop through iaqi object to populate data labels
           //   var ctx = document.getElementById('myChart').getContext('2d');
           //   var chart = new Chart(ctx, {
@@ -225,7 +233,7 @@ function getGood() {
   removeLayers(goodResults)
   let NE = map.getBounds().getNorthEast();
   let SW = map.getBounds().getSouthWest();
-  let aqiScore
+  let aqiScore;
   let http = new XMLHttpRequest();
   http.open("GET", `https://api.waqi.info/map/bounds/?latlng=${SW.lat},${SW.lng},${NE.lat},${NE.lng}&token=${WAQI_TOKEN}`, true);
   http.onreadystatechange = function () {
@@ -450,7 +458,7 @@ map.on('moveend', function() {
     removeLayers(goodResults);
     getGood();
   }else{
-    console.log("Good is not checked")
+    //console.log("Good is not checked")
   } 
 });
 
@@ -460,7 +468,7 @@ map.on('moveend',function(){
     removeLayers(moderateResults);
     getModerate();
   }else{
-    console.log("Moderate is not checked")
+    //console.log("Moderate is not checked")
   } 
 })
 
@@ -470,7 +478,7 @@ map.on('moveend',function(){
     removeLayers(sensitiveResults);
     getSensitive();
   }else{
-    console.log("Sensitive is not checked")
+    //console.log("Sensitive is not checked")
   } 
 })
 
@@ -480,7 +488,7 @@ map.on('moveend',function(){
     removeLayers(unhealthyResults);
     getUnhealthy();
   }else{
-    console.log("Unhealthy is not checked")
+    //console.log("Unhealthy is not checked")
   } 
 })
 
@@ -490,7 +498,7 @@ map.on('moveend',function(){
     removeLayers(vUnhealthyResults);
     getVUnhealthy();
   }else{
-    console.log("Very Unhealthy is not checked")
+   // //console.log("Very Unhealthy is not checked")
   } 
 })
 
@@ -500,7 +508,7 @@ map.on('moveend',function(){
     removeLayers(hazardousResults);
     getHazardous();
   }else{
-    console.log("Hazardous is not checked")
+    //console.log("Hazardous is not checked")
   } 
 })
 
@@ -515,7 +523,7 @@ map.on('moveend',function(){
 //Good Switch
 function goodAddRemove(){
   var state = document.getElementById("goodCheck").checked 
-  console.log(state)
+  //console.log(state)
   if(state === false){
     goodClusters.clearLayers()
     removeLayers(goodResults)
@@ -529,7 +537,7 @@ function goodAddRemove(){
 //Moderate Switch
 function modAddRemove(){
   var state = document.getElementById("modCheck").checked 
-  console.log(state)
+  //console.log(state)
   if(state === false){
     moderateClusters.clearLayers()
     removeLayers(moderateResults)
@@ -543,7 +551,7 @@ function modAddRemove(){
 //Sensitive Switch
 function sensitiveAddRemove(){
   var state = document.getElementById("sensCheck").checked 
-  console.log(state)
+  //console.log(state)
   if(state === false){
     sensitiveClusters.clearLayers()
     removeLayers(sensitiveResults)
@@ -557,7 +565,7 @@ function sensitiveAddRemove(){
 //Unhealthy Switch
 function unhealtyAddRemove(){
   var state = document.getElementById("unhealthyCheck").checked 
-  console.log(state)
+  //console.log(state)
   if(state === false){
     unhealthyClusters.clearLayers()
     removeLayers(unhealthyClusters)
@@ -571,7 +579,7 @@ function unhealtyAddRemove(){
 //Very Unhealthy Switch
 function vUnhealtyAddRemove(){
   var state = document.getElementById("vUnhealthyCheck").checked 
-  console.log(state)
+  //console.log(state)
   if(state === false){
     vUnhealthyClusters.clearLayers()
     removeLayers(vUnhealthyClusters)
@@ -585,7 +593,7 @@ function vUnhealtyAddRemove(){
 //Hazardous Switch
 function hazardousAddRemove(){
   var state = document.getElementById("hazardousCheck").checked 
-  console.log(state)
+  //console.log(state)
   if(state === false){
     hazardousClusters.clearLayers()
     removeLayers(hazardousClusters)
@@ -604,3 +612,13 @@ autocomplete.registerCallback(function(item) {
 console.log(`geocode result: ${item.lon} ${item.lat}`)
 map.flyTo([item.lat, item.lon],11)
 });
+
+window.onload = function() {
+  console.log("Window is loaded");
+  goodAddRemove();
+  modAddRemove();
+  sensitiveAddRemove();
+  unhealtyAddRemove();
+  vUnhealtyAddRemove();
+  hazardousAddRemove();
+};

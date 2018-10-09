@@ -1,3 +1,5 @@
-# AQI_Explorer
+# Emoji Air Quality Index Map
 
-https://chiubaca.github.io/AQI_Explorer/
+A little project to visualise air pollution levels around the world using emojis
+
+https://chiubaca.github.io/Emoji-AQI-Map/

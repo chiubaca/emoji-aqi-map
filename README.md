@@ -2,4 +2,4 @@
 
 A little project to visualise air pollution levels around the world using emojis
 
-https://chiubaca.github.io/Emoji-AQI-Map/
+https://chiubaca.github.io/emoji-aqi-map/

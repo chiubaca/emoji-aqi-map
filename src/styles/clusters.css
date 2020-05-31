@@ -1,0 +1,62 @@
+/* Clusters style overide */
+
+.good-cluster span {
+  /* background: rgba(0, 153, 102, 0.727); */
+  background-clip: padding-box;
+  border-radius: 20px;
+  padding: 7px 7px 7px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.46);
+  border-width: 3px;
+
+}
+
+.moderate-cluster span {
+  /* background: rgb(255, 221, 51); */
+  background-clip: padding-box;
+  border-radius: 20px;
+  padding: 7px 7px 7px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.46);
+  border-width: 3px;
+}
+
+.sensitive-cluster span {
+  /* background-color:rgb(255, 153, 51) */
+  background-clip: padding-box;
+  border-radius: 20px;
+  padding: 7px 7px 7px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.46);
+  border-width: 3px;
+}
+
+.unhealthy-cluster span {
+  /* background-color: rgb(204, 0, 51); */
+  background-clip: padding-box;
+  border-radius: 20px;
+  padding: 7px 7px 7px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.46);
+  border-width: 3px;
+}
+
+.v-unhealthy-cluster span {
+  /* background-color: rgb(102, 0, 153); */
+  background-clip: padding-box;
+  border-radius: 20px;
+  padding: 7px 7px 7px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.46);
+  border-width: 3px;
+}
+
+.hazardous-cluster span {
+  /* background-color: rgb(126, 0, 35); */
+  background-clip: padding-box;
+  border-radius: 20px;
+  padding: 7px 7px 7px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.46);
+  border-width: 3px;
+}

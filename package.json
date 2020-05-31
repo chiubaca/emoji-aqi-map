@@ -4,17 +4,17 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "leaflet": "^1.6.0"
+    "leaflet": "^1.6.0",
+    "leaflet.markercluster": "^1.4.1",
+    "twemoji": "^13.0.0"
   },
   "devDependencies": {
     "@types/leaflet": "^1.5.12",
-    "parcel-bundler": "^1.12.4",
-    "sass": "^1.26.7",
-    "typescript": "^3.9.3"
+    "parcel-bundler": "^1.12.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel public/index.html",
+    "start": "parcel public/index.html --open",
     "build": "parcel build public/index.html --public-url ./"
   },
   "repository": {

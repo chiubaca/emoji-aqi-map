@@ -4,11 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../src/styles/main.scss">
-    <title>Document</title>
+    <link rel="stylesheet" href="../src/styles/main.css">
+    <!-- Map Tiler geocoding service beta-->
+    <script src="https://cdn.klokantech.com/osmnames/v1/autocomplete.js"></script>
+    <title>AQI Explorer</title>
 </head>
 
 <body>
+    <!-- Location Search -->
+    <input autocomplete="off" id="search" placeholder=" 🔍Search Location" />
 
     <div id="mapid">
 
@@ -85,6 +89,6 @@
         </div>
     </div>
 </body>
-<script src="../src/logic/main.ts"></script>
+<script src="../src/logic/main.js"></script>
 
 </html>

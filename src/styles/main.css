@@ -3,6 +3,7 @@
 @import"./clusters";
 @import "./geosearch.css";
 @import "./toggles";
+@import "./github-corner.css";
 @import "../../node_modules/leaflet/dist/leaflet.css";
 
 html {

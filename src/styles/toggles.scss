@@ -1,0 +1,170 @@
+/* Toggle Switches */
+
+#container{
+  height: 100%;
+  width:15%;
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 1000;
+  position: relative;
+}
+
+.switch {
+  position: relative;
+  padding:10px; 
+  margin: 2px 0 5px 0;
+  top: 25%;
+}
+
+.emoji {
+  height:1.2rem
+  
+}
+
+/* text position */
+.switch p {
+  margin: 0;
+  position: absolute;
+  top: 32%;
+  left: 84%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)  
+}
+
+.label{
+
+  margin: 0;
+  position: absolute;
+  top: 78%;
+  left: 84%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)  
+}
+
+.toggle {
+  position: absolute;
+  top: 0;
+  left: -110;
+  right: 0;
+  bottom: 0;
+  width: 13em;
+  -webkit-transition: .10s ease;
+  transition: .20s ease;
+}
+
+.toggle:hover{
+ left:1px
+}
+
+.toggle:active{
+  left:1px
+ }
+
+
+#toggle-color-1:hover{
+  background: #096;
+}
+
+#toggle-color-2:hover{
+  background: #ffde33;
+}
+
+#toggle-color-3:hover{
+  background: #ff9933
+}
+
+#toggle-color-4:hover{
+  background: #cc0033
+}
+
+#toggle-color-5:hover{
+  background: #660099
+}
+
+#toggle-color-6:hover{
+  background: #7e0023
+}
+
+#toggle-color-1,#toggle-color-2,#toggle-color-3,#toggle-color-4,#toggle-color-5,#toggle-color-6{
+  background:grey;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin:-1px
+} 
+
+input:checked + #toggle-color-1 {
+  background-color: #096;
+}
+input:checked + #toggle-color-2 {
+  background-color: #ffde33;
+}
+input:checked + #toggle-color-3 {
+  background-color: #ff9933;
+}
+input:checked + #toggle-color-4 {
+  background-color: #cc0033;
+}
+input:checked + #toggle-color-5 {
+  background-color: #660099;
+}
+input:checked + #toggle-color-6 {
+  background-color: #7e0023;
+}
+
+
+/* AQI symbol markers */
+
+.good{
+  background-color: rgb(89, 182, 151);
+  padding: 1px 5px 0 5px;
+}
+
+.moderate{
+  background-color: #ffde33;
+  padding: 1px 5px 0 5px;
+}
+
+.sensitive{
+  background-color: #ff9933;
+  padding: 1px 5px 0 5px;
+}
+
+.unhealty{
+  background-color: #cc0033;
+  padding: 1px 9px 0 5px;
+}
+
+.v-unhealty{
+  background-color: #660099;
+  padding: 1px 9px 0 5px;
+}
+
+.hazardous{
+  background-color: #7e0023;
+  padding: 1px 10px 0 5px;
+}
+
+.emoji-icons{
+  font-size:15px;
+}
+
+.aqi-flag{
+  text-align:center;
+  border: white;
+  border-style: solid;
+  width: 20px;
+  color: rgb(20, 16, 16);
+  border-radius: 5px;
+  margin: -55px 0 0 -8px;
+}
+
+.line {
+  height: 6px;
+  width: 3px;
+  border-radius: 8px;
+  background-color: white;
+  position: absolute;
+  left:9px;
+  top: -6px;
+}

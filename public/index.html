@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/styles/main.css">
+    <!-- Map Tiler geocoding service beta-->
+    <script src="https://cdn.klokantech.com/osmnames/v1/autocomplete.js"></script>
+    <title>AQI Explorer</title>
+</head>
+
+<body>
+    <!-- Location Search -->
+    <input autocomplete="off" id="search" placeholder=" 🔍Search Location" />
+
+    <div id="mapid">
+
+        <header>
+            <div id="title">Air Pollution in the World</div>
+            <div id="sub-title">Real-time Air Quality Index (AQI)</div>
+        </header>
+
+        <!-- Toggle buttons -->
+        <div id="container">
+
+            <label class="switch">
+                <input type="checkbox" id="goodCheck" onchange="goodAddRemove()">
+                <span class="toggle" id="toggle-color-1">
+                    <p>😀</p>
+                    <span class="label">0-50</span>
+
+                    <div>Good</div>
+                    <div style="font-size: 8px">Satisfactory air quility <br>little or no risk</div>
+                </span>
+            </label>
+
+            <label class="switch">
+                <input type="checkbox" id="modCheck" onchange="modAddRemove()">
+                <span class="toggle" id="toggle-color-2">
+                    <p>🙁</p>
+                    <span class="label">51-100</span>
+                    <div>Moderate</div>
+                    <div style="font-size: 8px">Concern for a small <br>
+                        number of people</div>
+                </span>
+            </label>
+
+            <label class="switch">
+                <input type="checkbox" id="sensCheck" onchange="sensitiveAddRemove()">
+                <span class="toggle" id="toggle-color-3">
+                    <p>😨</p>
+                    <span class="label">101-150</span>
+                    <div>Sensitive</div>
+                    <div style="font-size: 8px">Unhealthy for<br>
+                        Sensitive Groups</div>
+                </span>
+            </label>
+
+            <label class="switch">
+                <input type="checkbox" id="unhealthyCheck" onchange="unhealtyAddRemove()">
+                <span class="toggle" id="toggle-color-4">
+                    <p>😷</p>
+                    <span class="label">151-200</span>
+                    <div>Unhealthy</div>
+                    <div style="font-size: 8px">Health concerns<br>for everyone</div>
+                </span>
+            </label>
+
+            <label class="switch">
+                <input type="checkbox" id="vUnhealthyCheck" onchange="vUnhealtyAddRemove()">
+                <span class="toggle" id="toggle-color-5">
+                    <p>🤢</p>
+                    <span class="label">201-300</span>
+                    <div>Very Unhealthy</div>
+                    <div style="font-size: 8px">Emergency health<br>warnings</div>
+                </span>
+            </label>
+
+            <label class="switch">
+                <input type="checkbox" id="hazardousCheck" onchange="hazardousAddRemove()">
+                <span class="toggle" id="toggle-color-6">
+                    <p>💀</p>
+                    <span class="label">300+</span>
+                    <div>Hazardous</div>
+                    <div style="font-size: 8px">Serious health effects<br />for everyone!</div>
+                </span>
+            </label>
+        </div>
+    </div>
+</body>
+<script src="../src/logic/main.js"></script>
+
+</html>

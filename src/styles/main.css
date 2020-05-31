@@ -1,0 +1,10 @@
+@import "./reset.css";
+@import "./map";
+@import"./clusters";
+@import "./geosearch.css";
+@import "./toggles";
+@import "../../node_modules/leaflet/dist/leaflet.css";
+
+html {
+    background: lightblue;
+}

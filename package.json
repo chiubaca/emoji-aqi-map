@@ -1,0 +1,30 @@
+{
+  "name": "emoji-aqi-explorer",
+  "version": "1.0.0",
+  "description": "Explore the World Air Quality with emojis",
+  "main": "public/index.html",
+  "dependencies": {
+    "leaflet": "^1.6.0",
+    "leaflet.markercluster": "^1.4.1",
+    "twemoji": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.5.12",
+    "parcel-bundler": "^1.12.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel public/index.html --open",
+    "build": "parcel build public/index.html --public-url ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiubaca/AQI_Explorer.git"
+  },
+  "author": "Alex Chiu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chiubaca/AQI_Explorer/issues"
+  },
+  "homepage": "https://github.com/chiubaca/AQI_Explorer#readme"
+}

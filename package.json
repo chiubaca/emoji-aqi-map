@@ -1,8 +1,8 @@
 {
-  "name": "aqi-explorer",
+  "name": "emoji-aqi-explorer",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Explore the World Air Quality with emojis",
+  "main": "public/index.html",
   "dependencies": {
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/chiubaca/AQI_Explorer.git"
   },
-  "author": "",
+  "author": "Alex Chiu",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/chiubaca/AQI_Explorer/issues"

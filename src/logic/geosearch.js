@@ -1,4 +1,8 @@
-export function initSearch() {
+/**
+ * 
+ * @param {object} map - leaflet map object
+ */
+export function initSearch(map) {
   // Map Tiler Geocoding Service //
   var autocomplete = new kt.OsmNamesAutocomplete(
     'search', 'https://geocoder.tilehosting.com/', 'UrB6eUgP5z7iW5eaEk0j');

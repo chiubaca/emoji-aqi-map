@@ -2,8 +2,8 @@
 import L from "leaflet"
 import "leaflet.markercluster"
 import twemoji from "twemoji"
-// import { mean, numberRange, normalise } from "./helpers"
-// import { initSearch } from "./geosearch"
+import { initSearch } from "./geosearch";
+import { mean, numberRange, normalise } from "./helpers"
 
 twemoji.parse(document.body);
 
@@ -32,7 +32,6 @@ let goodClusters = L.markerClusterGroup({
     return L.divIcon({ className: 'good-cluster', html: "<span style='background: rgba(0, 153, 102,+" + normalise(mean(aqiList), opacityLookup.length) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
 });
-
 let moderateClusters = L.markerClusterGroup({
   iconCreateFunction: function (cluster) {
 
@@ -82,7 +81,6 @@ let vUnhealthyClusters = L.markerClusterGroup({
     return L.divIcon({ className: 'v-unhealthy-cluster', html: "<span style='background: rgba(102, 0, 153,+" + ((normalise(mean(aqiList), opacityLookup.length)) - 1.0) + ")'>" + '≈' + mean(aqiList) + "</span>" });
   }
 });
-
 let hazardousClusters = L.markerClusterGroup({
   iconCreateFunction: function (cluster) {
     let clusterItems = cluster.getAllChildMarkers()
@@ -96,9 +94,9 @@ let hazardousClusters = L.markerClusterGroup({
   }
 });
 
-
 //Initiate Map and layers...
 console.log("Loading map")
+
 let map = L.map('mapid', { zoomControl: false }).setView([51.505, -0.09], 7);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -131,29 +129,7 @@ function removeLayers(layersArray) {
   hazardousResults = [];
 }
 
-//Find Mean from a list of numbers 
-function mean(numbers) {
-  // mean of [3, 5, 4, 4, 1, 1, 2, 3] is 2.875
-  let total = 0,
-    i;
-  for (let i = 0; i < numbers.length; i += 1) {
-    total += numbers[i];
-  }
-  return Math.round(total / numbers.length);
-}
-
-//Outputs a range used to for producing a normalised number used for opacity value
-function numberRange(lowAQI, topAQI) {
-  return new Array(topAQI - lowAQI).fill().map((d, i) => i + lowAQI);
-};
-
-//Normalised score
-function normalise(x, y) {
-  return x / y;
-};
-
 //Popup with additional AQI data
-
 function dataPopup(onClickEvent) {
   // let lat = onClickEvent.latlng.lat;
   // let lng = onClickEvent.latlng.lng;
@@ -440,7 +416,6 @@ function getHazardous() {
 //---MAP EVENTS---//
 ///////////////////
 
-
 //Move events to trigger Good levels of pollution
 map.on('moveend', function () {
   if (document.getElementById("goodCheck").checked) {
@@ -504,7 +479,6 @@ map.on('moveend', function () {
 
 
 //TODO: Get info about station on click
-
 
 //////////////////////////
 //---TOGGLE SWITCHES ---//
@@ -594,14 +568,7 @@ function hazardousAddRemove() {
   }
 }
 
-
-// Map Tiler Geocoding Service //
-let autocomplete = new kt.OsmNamesAutocomplete(
-  'search', 'https://geocoder.tilehosting.com/', 'UrB6eUgP5z7iW5eaEk0j');
-autocomplete.registerCallback(function (item) {
-  console.log(`geocode result: ${item.lon} ${item.lat}`)
-  map.flyTo([item.lat, item.lon], 11)
-});
+initSearch(map);
 
 window.onload = function () {
   console.log("Window is loaded");

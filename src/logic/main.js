@@ -99,11 +99,10 @@ console.log("Loading map")
 
 let map = L.map('mapid', { zoomControl: false }).setView([51.505, -0.09], 7);
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+L.tileLayer('https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key={accessToken}', {
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>,' + WAQI_ATTR,
   maxZoom: 18,
-  id: 'mapbox.light',
-  accessToken: 'pk.eyJ1IjoiY2hpdWJhY2EiLCJhIjoiY2lrNWp6NzI2MDA0NmlmbTIxdGVybzF3YyJ9.rRBFEm_VY3yRzpMey8ufKA'
+  accessToken: 'UrB6eUgP5z7iW5eaEk0j'
 }).addTo(map)
 
 
